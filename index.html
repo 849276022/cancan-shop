@@ -3,102 +3,751 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🏪 灿宝的店 - 首页</title>
+    <title>灿宝的店 - 广西新鲜水果直发｜草莓葡萄产地直供</title>
+    <meta name="description" content="灿宝的店，广西南宁新鲜水果直发。草莓3元/份，葡萄6元/份，产地直供，坏果包赔。kingking群主家自种，新鲜采摘，全国发货。">
+    <meta name="keywords" content="广西水果,新鲜草莓,巨峰葡萄,产地直发,坏果包赔,南宁水果">
+    <meta property="og:title" content="灿宝的店 - 广西新鲜水果直发">
+    <meta property="og:description" content="草莓3元/份，葡萄6元/份，产地直供，坏果包赔，新鲜采摘全国发货">
+    <meta property="og:image" content="https://849276022.github.io/cancan-shop/images/strawberry-1.jpg">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍓</text></svg>">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif; 
+            background: linear-gradient(135deg, #f5f0e8 0%, #faf7f2 100%);
+            color: #333;
+            line-height: 1.6;
+        }
         
-        /* 头部 */
-        header { background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
-        .header-content { max-width: 1200px; margin: 0 auto; padding: 16px; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 24px; font-weight: bold; color: #333; text-decoration: none; }
-        .cart-btn { display: flex; align-items: center; gap: 8px; color: #666; text-decoration: none; padding: 8px 16px; border-radius: 8px; background: #f5f5f5; }
-        .cart-btn:hover { background: #eee; }
-        .cart-badge { background: #e53935; color: white; font-size: 12px; padding: 2px 8px; border-radius: 10px; }
+        /* 头部 - 清新水果风 */
+        header { 
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%); 
+            box-shadow: 0 4px 20px rgba(238, 90, 90, 0.3); 
+            position: sticky; 
+            top: 0; 
+            z-index: 100;
+            color: white;
+        }
+        .header-content { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 16px 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        .logo { 
+            font-size: 24px; 
+            font-weight: bold; 
+            color: white; 
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .logo::before { content: '🍓'; font-size: 28px; }
+        .header-contact {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+        }
+        .header-contact span {
+            background: rgba(255,255,255,0.2);
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
         
         /* 主内容 */
-        main { max-width: 1200px; margin: 0 auto; padding: 40px 16px; }
+        main { max-width: 1200px; margin: 0 auto; padding: 20px; }
         
-        /* 店铺介绍 */
-        .hero { text-align: center; margin-bottom: 48px; }
-        .hero h1 { font-size: 36px; color: #333; margin-bottom: 16px; }
-        .hero p { font-size: 18px; color: #666; max-width: 600px; margin: 0 auto; }
+        /* 店铺介绍 - 清新水果风 */
+        .hero { 
+            background: linear-gradient(135deg, #fff 0%, #fff9f5 100%);
+            border-radius: 20px; 
+            padding: 40px 30px; 
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            text-align: center;
+            border: 2px solid #ffe4d6;
+        }
+        .hero-badge {
+            display: inline-flex;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .hero-badge span {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .hero h1 { 
+            font-size: 32px; 
+            color: #333; 
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+        .hero-slogan {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 24px;
+        }
+        .hero-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+        .hero-info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #555;
+            font-size: 15px;
+        }
+        .hero-info-item::before {
+            content: '✓';
+            width: 20px;
+            height: 20px;
+            background: #4caf50;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
         
         /* 商品网格 */
-        .products { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-title::before {
+            content: '🍇';
+            font-size: 28px;
+        }
+        .products { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+            gap: 24px; 
+            margin-bottom: 40px;
+        }
         
-        /* 商品卡片 */
-        .product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
-        .product-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
-        .product-image { aspect-ratio: 1; background: linear-gradient(135deg, #e0e0e0, #f5f5f5); display: flex; align-items: center; justify-content: center; color: #999; }
-        .product-info { padding: 16px; }
-        .product-name { font-size: 18px; font-weight: 600; color: #333; margin-bottom: 8px; }
-        .product-desc { font-size: 14px; color: #666; margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .product-price { font-size: 24px; font-weight: bold; color: #e53935; }
+        /* 商品卡片 - 清新水果风 */
+        .product-card { 
+            background: white; 
+            border-radius: 16px; 
+            overflow: hidden; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08); 
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
+        }
+        .product-card:hover { 
+            transform: translateY(-6px); 
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15); 
+        }
+        .product-image { 
+            aspect-ratio: 1; 
+            background: linear-gradient(135deg, #fff5f5 0%, #fff 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+        .product-tags {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            display: flex;
+            gap: 6px;
+        }
+        .product-tag {
+            background: rgba(255,107,107,0.9);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .product-info { padding: 20px; }
+        .product-name { 
+            font-size: 20px; 
+            font-weight: 700; 
+            color: #333; 
+            margin-bottom: 8px;
+        }
+        .product-desc { 
+            font-size: 14px; 
+            color: #666; 
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+        .product-price-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        .product-price { 
+            font-size: 28px; 
+            font-weight: 800; 
+            color: #ee5a5a;
+        }
+        .product-unit {
+            font-size: 14px;
+            color: #999;
+        }
+        .btn-consult {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-consult:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(238, 90, 90, 0.4);
+        }
+        .btn-consult::before {
+            content: '💬';
+        }
         
         /* 商品详情页 */
-        .product-detail { display: none; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
-        .product-detail.active { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; padding: 32px; }
-        .detail-image { aspect-ratio: 1; background: linear-gradient(135deg, #e0e0e0, #f5f5f5); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999; }
-        .detail-info h2 { font-size: 28px; color: #333; margin-bottom: 16px; }
-        .detail-info p { color: #666; margin-bottom: 24px; line-height: 1.6; }
-        .detail-price { font-size: 36px; font-weight: bold; color: #e53935; margin-bottom: 24px; }
-        .detail-specs { background: #f9f9f9; padding: 16px; border-radius: 8px; margin-bottom: 24px; }
-        .detail-specs h4 { color: #333; margin-bottom: 8px; }
-        .detail-specs ul { list-style: none; color: #666; font-size: 14px; }
-        .detail-specs li { padding: 4px 0; }
-        .quantity-selector { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
-        .quantity-btn { width: 36px; height: 36px; border: 1px solid #ddd; background: white; border-radius: 8px; cursor: pointer; font-size: 18px; }
-        .quantity-btn:hover { background: #f5f5f5; }
-        .quantity-value { font-size: 18px; font-weight: 600; min-width: 40px; text-align: center; }
-        .btn-group { display: flex; gap: 12px; }
-        .btn { flex: 1; padding: 14px 24px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
-        .btn:hover { opacity: 0.9; }
-        .btn-primary { background: #1976d2; color: white; }
-        .btn-danger { background: #e53935; color: white; }
-        .back-btn { display: inline-flex; align-items: center; gap: 8px; color: #666; text-decoration: none; margin-bottom: 24px; cursor: pointer; }
-        .back-btn:hover { color: #333; }
+        .product-detail { 
+            display: none; 
+            background: white; 
+            border-radius: 16px; 
+            overflow: hidden; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        .product-detail.active { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 40px; 
+            padding: 40px;
+        }
+        .detail-image { 
+            aspect-ratio: 1; 
+            background: linear-gradient(135deg, #fff5f5 0%, #fff 100%);
+            border-radius: 12px; 
+            overflow: hidden;
+        }
+        .detail-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .detail-info h2 { 
+            font-size: 28px; 
+            color: #333; 
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+        .detail-desc {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .detail-price { 
+            font-size: 36px; 
+            font-weight: 800; 
+            color: #ee5a5a; 
+            margin-bottom: 24px;
+        }
+        .detail-price span {
+            font-size: 16px;
+            color: #999;
+            font-weight: 400;
+        }
+        
+        /* 规格表格 */
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+            background: #fafafa;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .specs-table tr:nth-child(odd) {
+            background: #f5f5f5;
+        }
+        .specs-table td {
+            padding: 12px 16px;
+            font-size: 14px;
+        }
+        .specs-table td:first-child {
+            color: #666;
+            width: 100px;
+        }
+        .specs-table td:last-child {
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .btn-group { 
+            display: flex; 
+            gap: 12px; 
+            margin-top: 24px;
+        }
+        .btn { 
+            flex: 1; 
+            padding: 16px 24px; 
+            border: none; 
+            border-radius: 12px; 
+            font-size: 16px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        .btn-primary { 
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%); 
+            color: white; 
+        }
+        .btn-primary::before { content: '🛒'; }
+        .btn-danger { 
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%); 
+            color: white; 
+        }
+        .btn-danger::before { content: '⚡'; }
+        .back-btn { 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 8px; 
+            color: #666; 
+            text-decoration: none; 
+            margin-bottom: 24px; 
+            cursor: pointer;
+            font-size: 15px;
+            padding: 8px 16px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .back-btn:hover { 
+            background: #e8e8e8;
+            color: #333;
+        }
         
         /* 购物车页 */
-        .cart-page { display: none; background: white; border-radius: 12px; padding: 24px; }
+        .cart-page { 
+            display: none; 
+            background: white; 
+            border-radius: 16px; 
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
         .cart-page.active { display: block; }
-        .cart-item { display: flex; align-items: center; gap: 16px; padding: 16px 0; border-bottom: 1px solid #eee; }
-        .cart-item-image { width: 80px; height: 80px; background: #f5f5f5; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999; }
+        .cart-item { 
+            display: flex; 
+            align-items: center; 
+            gap: 16px; 
+            padding: 20px 0; 
+            border-bottom: 1px solid #eee; 
+        }
+        .cart-item-image { 
+            width: 80px; 
+            height: 80px; 
+            background: #f5f5f5; 
+            border-radius: 10px; 
+            overflow: hidden;
+        }
+        .cart-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
         .cart-item-info { flex: 1; }
-        .cart-item-name { font-weight: 600; color: #333; }
-        .cart-item-price { color: #e53935; font-weight: 600; }
-        .cart-item-actions { display: flex; align-items: center; gap: 8px; }
-        .cart-empty { text-align: center; padding: 60px 0; color: #999; }
-        .cart-total { margin-top: 24px; padding-top: 24px; border-top: 2px solid #eee; }
-        .cart-total-row { display: flex; justify-content: space-between; font-size: 18px; margin-bottom: 16px; }
-        .cart-total-row.final { font-size: 24px; font-weight: bold; }
-        .cart-total-row.final .amount { color: #e53935; }
+        .cart-item-name { 
+            font-weight: 600; 
+            color: #333;
+            margin-bottom: 4px;
+        }
+        .cart-item-price { 
+            color: #ee5a5a; 
+            font-weight: 700;
+            font-size: 16px;
+        }
+        .cart-empty { 
+            text-align: center; 
+            padding: 80px 0; 
+            color: #999; 
+        }
+        .cart-empty-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+        .cart-total { 
+            margin-top: 30px; 
+            padding-top: 30px; 
+            border-top: 2px solid #eee; 
+        }
+        .cart-total-row { 
+            display: flex; 
+            justify-content: space-between; 
+            font-size: 16px; 
+            margin-bottom: 12px;
+            color: #666;
+        }
+        .cart-total-row.final { 
+            font-size: 24px; 
+            font-weight: 700;
+            color: #333;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px dashed #ddd;
+        }
+        .cart-total-row.final .amount { 
+            color: #ee5a5a; 
+            font-size: 28px;
+        }
         
         /* 支付弹窗 */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+        .modal { 
+            display: none; 
+            position: fixed; 
+            inset: 0; 
+            background: rgba(0,0,0,0.6); 
+            z-index: 1000; 
+            align-items: center; 
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
         .modal.active { display: flex; }
-        .modal-content { background: white; border-radius: 16px; padding: 32px; max-width: 500px; width: 90%; }
-        .modal-title { font-size: 24px; font-weight: bold; text-align: center; margin-bottom: 16px; }
-        .modal-amount { text-align: center; font-size: 32px; font-weight: bold; color: #e53935; margin-bottom: 24px; }
-        .qr-codes { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
-        .qr-code { background: #f5f5f5; aspect-ratio: 1; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: #999; }
-        .qr-code span { font-size: 14px; }
-        .payment-note { background: #fff8e1; border: 1px solid #ffe082; padding: 16px; border-radius: 8px; margin-bottom: 24px; font-size: 14px; color: #666; }
-        .contact-info { text-align: center; color: #666; margin-bottom: 24px; }
-        .contact-info strong { color: #333; }
-        .modal-close { width: 100%; padding: 12px; background: #f5f5f5; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; }
+        .modal-content { 
+            background: white; 
+            border-radius: 20px; 
+            padding: 32px; 
+            max-width: 480px; 
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-title { 
+            font-size: 24px; 
+            font-weight: 700; 
+            text-align: center; 
+            margin-bottom: 8px;
+            color: #333;
+        }
+        .modal-subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+        .modal-amount { 
+            text-align: center; 
+            font-size: 36px; 
+            font-weight: 800; 
+            color: #ee5a5a; 
+            margin-bottom: 24px;
+        }
+        .qr-codes { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 16px; 
+            margin-bottom: 24px; 
+        }
+        .qr-code { 
+            background: #f8f8f8; 
+            aspect-ratio: 1; 
+            border-radius: 12px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 8px; 
+            padding: 12px;
+            border: 2px solid #f0f0f0;
+            transition: all 0.3s ease;
+        }
+        .qr-code:hover {
+            border-color: #ff6b6b;
+            background: #fff5f5;
+        }
+        .qr-code img { 
+            width: 85%; 
+            height: 85%; 
+            object-fit: contain; 
+            border-radius: 8px;
+        }
+        .qr-code span { 
+            font-size: 13px; 
+            color: #666;
+            font-weight: 500;
+        }
+        .payment-note { 
+            background: linear-gradient(135deg, #fff9e6 0%, #fff5d6 100%); 
+            border: 1px solid #ffe082; 
+            padding: 16px; 
+            border-radius: 12px; 
+            margin-bottom: 20px; 
+            font-size: 14px; 
+            color: #666;
+        }
+        .payment-note strong { 
+            color: #333;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .payment-note ol {
+            margin-left: 16px;
+            line-height: 1.8;
+        }
+        .contact-box {
+            background: #f8f8f8;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .contact-box-title {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        .contact-box-wechat {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-copy {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-copy:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+        .btn-copy::before {
+            content: '📋';
+            margin-right: 4px;
+        }
+        .modal-close { 
+            width: 100%; 
+            padding: 14px; 
+            background: #f5f5f5; 
+            border: none; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            font-size: 16px;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+        .modal-close:hover {
+            background: #e8e8e8;
+            color: #333;
+        }
+        
+        /* 悬浮联系按钮 */
+        .float-contact {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .float-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 6px 20px rgba(238, 90, 90, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .float-btn:hover {
+            transform: scale(1.1) translateY(-4px);
+            box-shadow: 0 10px 30px rgba(238, 90, 90, 0.5);
+        }
+        .float-btn::after {
+            content: attr(data-label);
+            position: absolute;
+            right: 70px;
+            background: #333;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .float-btn:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* FAQ区域 */
+        .faq-section {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .faq-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .faq-title::before {
+            content: '❓';
+            font-size: 26px;
+        }
+        .faq-item {
+            border-bottom: 1px solid #eee;
+            padding: 20px 0;
+        }
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+        .faq-q {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .faq-q::before {
+            content: 'Q';
+            width: 24px;
+            height: 24px;
+            background: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .faq-a {
+            color: #666;
+            padding-left: 32px;
+            line-height: 1.6;
+        }
         
         /* 页脚 */
-        footer { background: #333; color: white; padding: 32px 16px; margin-top: 60px; }
-        footer .content { max-width: 1200px; margin: 0 auto; text-align: center; }
-        footer p { margin-bottom: 8px; }
-        footer .sub { color: #999; font-size: 14px; }
+        footer { 
+            background: linear-gradient(135deg, #333 0%, #444 100%); 
+            color: white; 
+            padding: 40px 20px; 
+            margin-top: 60px; 
+        }
+        footer .content { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            text-align: center; 
+        }
+        footer p { 
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+        footer .sub { 
+            color: #aaa; 
+            font-size: 14px; 
+            margin-top: 12px;
+        }
+        .footer-contact {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .footer-contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #ccc;
+        }
         
         /* 响应式 */
         @media (max-width: 768px) {
-            .product-detail.active { grid-template-columns: 1fr; }
-            .hero h1 { font-size: 28px; }
-            .detail-price { font-size: 28px; }
+            .product-detail.active { 
+                grid-template-columns: 1fr; 
+                padding: 24px;
+            }
+            .hero h1 { font-size: 24px; }
+            .hero-info { gap: 16px; }
+            .products { grid-template-columns: 1fr; }
+            .float-contact {
+                bottom: 20px;
+                right: 20px;
+            }
+            .float-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+            .qr-codes { grid-template-columns: 1fr; }
+            .btn-group { flex-direction: column; }
         }
     </style>
 </head>
@@ -106,21 +755,42 @@
     <!-- 头部 -->
     <header>
         <div class="header-content">
-            <a href="#" class="logo" onclick="showHome()">🏪 灿宝的店</a>
-            <a href="#" class="cart-btn" onclick="showCart()">
-                🛒 购物车
-                <span class="cart-badge" id="cartBadge">0</span>
-            </a>
+            <a href="#" class="logo" onclick="showHome()">灿宝的店</a>
+            <div class="header-contact">
+                <span>📍 广西南宁</span>
+                <span>💬 Dream1314520ss</span>
+            </div>
         </div>
     </header>
 
     <!-- 首页 -->
     <main id="homePage">
+        <!-- 店铺介绍 -->
         <div class="hero">
-            <h1>欢迎来到灿宝的店</h1>
-            <p>精选好物，品质保证，欢迎选购！</p>
+            <div class="hero-badge">
+                <span>🍓 新鲜采摘</span>
+                <span>📦 产地直发</span>
+                <span>✅ 坏果包赔</span>
+            </div>
+            <h1>广西新鲜水果直发</h1>
+            <p class="hero-slogan">kingking群主家自种 · 现摘现发 · 全国包邮</p>
+            <div class="hero-info">
+                <div class="hero-info-item">广西产地直发</div>
+                <div class="hero-info-item">48小时内发货</div>
+                <div class="hero-info-item">坏果包赔</div>
+                <div class="hero-info-item">新鲜保证</div>
+            </div>
         </div>
+
+        <!-- 商品列表 -->
+        <h2 class="section-title">新鲜上架</h2>
         <div class="products" id="productsList"></div>
+
+        <!-- FAQ -->
+        <div class="faq-section">
+            <h2 class="faq-title">常见问题</h2>
+            <div id="faqList"></div>
+        </div>
     </main>
 
     <!-- 商品详情页 -->
@@ -138,59 +808,114 @@
     <div class="modal" id="paymentModal">
         <div class="modal-content">
             <h2 class="modal-title">扫码支付</h2>
+            <p class="modal-subtitle">支付后请截图并添加客服微信</p>
             <p class="modal-amount">¥<span id="payAmount">0</span></p>
             <div class="qr-codes">
                 <div class="qr-code">
-                    <img src="images/微信收款码.png" style="width:90%;height:90%;object-contain;border-radius:8px;" alt="微信收款码">
-                    <span>微信支付</span>
+                    <img src="images/wechat-pay.png" alt="微信收款码">
+                    <span>👆 长按保存</span>
                 </div>
                 <div class="qr-code">
-                    <img src="images/支付宝收款码.jpg" style="width:90%;height:90%;object-contain;border-radius:8px;" alt="支付宝收款码">
-                    <span>支付宝</span>
+                    <img src="images/alipay.jpg" alt="支付宝收款码">
+                    <span>👆 长按保存</span>
                 </div>
             </div>
             <div class="payment-note">
-                <strong>支付说明：</strong><br>
-                1. 扫码支付后，请截图保存支付凭证<br>
-                2. 添加客服微信发送凭证<br>
-                3. 确认收款后安排发货<br>
-                4. 发货地址：广西南宁
+                <strong>💡 支付流程：</strong>
+                <ol>
+                    <li>选择上方收款码，长按保存到相册</li>
+                    <li>打开微信/支付宝，扫描相册中的收款码</li>
+                    <li>支付后截图保存支付凭证</li>
+                    <li>添加下方客服微信，发送凭证</li>
+                    <li>确认收款后48小时内发货</li>
+                </ol>
             </div>
-            <p class="contact-info">客服微信：<strong>Dream1314520ss</strong></p>
+            <div class="contact-box">
+                <div class="contact-box-title">客服微信（点击复制）</div>
+                <div class="contact-box-wechat" id="wechatId">📱 Dream1314520ss</div>
+                <button class="btn-copy" onclick="copyWechat()">复制微信号</button>
+            </div>
             <button class="modal-close" onclick="closeModal()">关闭</button>
         </div>
+    </div>
+
+    <!-- 悬浮联系按钮 -->
+    <div class="float-contact">
+        <button class="float-btn" data-label="复制微信号" onclick="copyWechat()">💬</button>
+        <button class="float-btn" data-label="查看购物车" onclick="showCart()" style="background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);">🛒</button>
     </div>
 
     <!-- 页脚 -->
     <footer>
         <div class="content">
-            <p>© 2026 灿宝的店 - 版权所有</p>
-            <p class="sub">客服微信：Dream1314520ss</p>
+            <p>© 2026 灿宝的店 - 广西新鲜水果直发</p>
+            <div class="footer-contact">
+                <div class="footer-contact-item">📍 发货地：广西南宁</div>
+                <div class="footer-contact-item">💬 客服微信：Dream1314520ss</div>
+                <div class="footer-contact-item">📦 48小时内发货</div>
+            </div>
+            <p class="sub">新鲜采摘 · 产地直发 · 坏果包赔</p>
         </div>
     </footer>
 
     <script>
-        // 商品数据 - 灿宝的店
-        const products = [
-            { id: 1, name: '草莓', price: 3, desc: '广西kingking群主家里种的新鲜草莓，香甜可口', specs: ['产地：广西', '来源：kingking群主家自种', '特点：新鲜采摘，香甜多汁', '发货：广西南宁发货'] },
-            { id: 2, name: '葡萄', price: 6, desc: '来自广西kingking群胜产葡萄，颗粒饱满，汁多味甜', specs: ['产地：广西', '来源：kingking群胜产葡萄', '特点：颗粒饱满，汁多味甜', '发货：广西南宁发货'] },
-        ];
-
-        // 购物车数据
+        // 加载商品数据
+        let products = [];
+        let storeInfo = {};
+        let faq = [];
         let cart = JSON.parse(localStorage.getItem('cancan-cart') || '[]');
-        
+
+        // 初始化
+        async function init() {
+            try {
+                const response = await fetch('products.json');
+                const data = await response.json();
+                products = data.products;
+                storeInfo = data.store;
+                faq = data.faq;
+                renderProducts();
+                renderFAQ();
+                saveCart();
+            } catch (error) {
+                console.error('加载商品数据失败:', error);
+            }
+        }
+
         // 显示商品列表
         function renderProducts() {
             const list = document.getElementById('productsList');
-            const images = ['', 'images/商品1草莓.jpg', 'images/商品2葡萄.jpg'];
             list.innerHTML = products.map(p => `
                 <div class="product-card" onclick="showProduct(${p.id})">
-                    <div class="product-image"><img src="${images[p.id]}" style="width:100%;height:100%;object-fit:cover;" alt="${p.name}"></div>
+                    <div class="product-image">
+                        <img src="${p.images[0]}" alt="${p.name}" loading="lazy">
+                        <div class="product-tags">
+                            ${p.tags.slice(0, 2).map(tag => `<span class="product-tag">${tag}</span>`).join('')}
+                        </div>
+                    </div>
                     <div class="product-info">
                         <div class="product-name">${p.name}</div>
                         <div class="product-desc">${p.desc}</div>
-                        <div class="product-price">¥${p.price}</div>
+                        <div class="product-price-row">
+                            <div>
+                                <span class="product-price">¥${p.price}</span>
+                                <span class="product-unit">/${p.unit}</span>
+                            </div>
+                        </div>
+                        <button class="btn-consult" onclick="event.stopPropagation(); showProduct(${p.id})">
+                            立即咨询/下单
+                        </button>
                     </div>
+                </div>
+            `).join('');
+        }
+
+        // 显示FAQ
+        function renderFAQ() {
+            const list = document.getElementById('faqList');
+            list.innerHTML = faq.map(item => `
+                <div class="faq-item">
+                    <div class="faq-q">${item.q}</div>
+                    <div class="faq-a">${item.a}</div>
                 </div>
             `).join('');
         }
@@ -204,35 +929,36 @@
             document.getElementById('productPage').style.display = 'block';
             document.getElementById('cartPage').style.display = 'none';
             
-            const detailImages = ['', 'images/商品1草莓.jpg', 'images/商品2葡萄.jpg'];
+            const specsHtml = Object.entries(p.specs).map(([key, val]) => `
+                <tr><td>${key}</td><td>${val}</td></tr>
+            `).join('');
+            
             document.getElementById('productDetail').innerHTML = `
-                <div class="detail-image"><img src="${detailImages[p.id]}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;" alt="${p.name}"></div>
+                <div class="detail-image">
+                    <img src="${p.images[0]}" alt="${p.name}">
+                </div>
                 <div class="detail-info">
+                    <div style="margin-bottom: 12px;">
+                        ${p.tags.map(tag => `<span style="background: #ff6b6b; color: white; padding: 4px 10px; border-radius: 12px; font-size: 12px; margin-right: 6px;">${tag}</span>`).join('')}
+                    </div>
                     <h2>${p.name}</h2>
-                    <p>${p.desc}</p>
-                    <div class="detail-price">¥${p.price}</div>
-                    <div class="detail-specs">
-                        <h4>商品详情</h4>
-                        <ul>${p.specs.map(s => `<li>• ${s}</li>`).join('')}</ul>
+                    <p class="detail-desc">${p.desc}</p>
+                    <div class="detail-price">
+                        ¥${p.price}<span>/${p.unit}</span>
                     </div>
-                    <div class="quantity-selector">
-                        <span>数量：</span>
-                        <button class="quantity-btn" onclick="changeQty(-1)">-</button>
-                        <span class="quantity-value" id="qtyValue">1</span>
-                        <button class="quantity-btn" onclick="changeQty(1)">+</button>
-                    </div>
+                    <table class="specs-table">
+                        ${specsHtml}
+                    </table>
                     <div class="btn-group">
-                        <button class="btn btn-primary" onclick="addToCart(${p.id})">加入购物车</button>
-                        <button class="btn btn-danger" onclick="buyNow(${p.id})">立即购买</button>
+                        <button class="btn btn-primary" onclick="addToCart(${p.id}); showCart();">
+                            加入购物车
+                        </button>
+                        <button class="btn btn-danger" onclick="buyNow(${p.id})">
+                            立即购买
+                        </button>
                     </div>
                 </div>
             `;
-        }
-
-        let currentQty = 1;
-        function changeQty(delta) {
-            currentQty = Math.max(1, currentQty + delta);
-            document.getElementById('qtyValue').textContent = currentQty;
         }
 
         // 显示首页
@@ -247,13 +973,12 @@
             const p = products.find(x => x.id === id);
             const existing = cart.find(x => x.id === id);
             if (existing) {
-                existing.qty += currentQty;
+                existing.qty += 1;
             } else {
-                cart.push({ id: p.id, name: p.name, price: p.price, qty: currentQty });
+                cart.push({ id: p.id, name: p.name, price: p.price, qty: 1, image: p.images[0] });
             }
             saveCart();
-            alert('已添加到购物车！');
-            currentQty = 1;
+            alert('✅ 已添加到购物车！');
         }
 
         function buyNow(id) {
@@ -263,7 +988,8 @@
 
         function saveCart() {
             localStorage.setItem('cancan-cart', JSON.stringify(cart));
-            document.getElementById('cartBadge').textContent = cart.reduce((s, x) => s + x.qty, 0);
+            const totalQty = cart.reduce((s, x) => s + x.qty, 0);
+            document.querySelectorAll('.cart-badge').forEach(el => el.textContent = totalQty);
         }
 
         function showCart() {
@@ -275,22 +1001,26 @@
             
             document.getElementById('cartContent').innerHTML = cart.length === 0 ? 
                 `<div class="cart-empty">
-                    <p style="font-size: 24px; margin-bottom: 16px;">🛒 购物车是空的</p>
-                    <button class="btn btn-primary" onclick="showHome()">去购物</button>
+                    <div class="cart-empty-icon">🛒</div>
+                    <p style="font-size: 18px; margin-bottom: 8px;">购物车是空的</p>
+                    <p style="color: #999; font-size: 14px; margin-bottom: 20px;">快去挑选新鲜水果吧～</p>
+                    <button class="btn btn-primary" onclick="showHome()" style="width: 200px;">去购物</button>
                 </div>` :
-                `<h2 style="margin-bottom: 24px;">购物车</h2>
+                `<h2 style="margin-bottom: 24px; font-size: 22px;">🛒 购物车</h2>
                 ${cart.map((item, idx) => `
                     <div class="cart-item">
-                        <div class="cart-item-image"><img src="images/商品${item.id == 1 ? '草莓' : '葡萄'}.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:8px;" alt="${item.name}"></div>
+                        <div class="cart-item-image">
+                            <img src="${item.image}" alt="${item.name}">
+                        </div>
                         <div class="cart-item-info">
                             <div class="cart-item-name">${item.name}</div>
                             <div class="cart-item-price">¥${item.price} × ${item.qty}</div>
                         </div>
                         <div class="cart-item-actions">
                             <button class="quantity-btn" onclick="updateQty(${idx}, -1)">-</button>
-                            <span>${item.qty}</span>
+                            <span style="min-width: 30px; text-align: center; font-weight: 600;">${item.qty}</span>
                             <button class="quantity-btn" onclick="updateQty(${idx}, 1)">+</button>
-                            <button class="quantity-btn" onclick="removeItem(${idx})" style="color: #e53935;">×</button>
+                            <button class="quantity-btn" onclick="removeItem(${idx})" style="color: #ee5a5a; margin-left: 8px;">×</button>
                         </div>
                     </div>
                 `).join('')}
@@ -301,13 +1031,15 @@
                     </div>
                     <div class="cart-total-row">
                         <span>运费</span>
-                        <span>免运费</span>
+                        <span style="color: #4caf50;">免运费</span>
                     </div>
                     <div class="cart-total-row final">
                         <span>合计</span>
                         <span class="amount">¥${total}</span>
                     </div>
-                    <button class="btn btn-danger" style="width: 100%; margin-top: 16px;" onclick="showPayment(${total})">去支付</button>
+                    <button class="btn btn-danger" style="width: 100%; margin-top: 16px;" onclick="showPayment(${total})">
+                        去支付
+                    </button>
                 </div>`;
         }
 
@@ -332,9 +1064,22 @@
             document.getElementById('paymentModal').classList.remove('active');
         }
 
+        // 复制微信号
+        function copyWechat() {
+            navigator.clipboard.writeText('Dream1314520ss').then(() => {
+                alert('✅ 微信号已复制：Dream1314520ss\n\n快去微信添加好友吧！');
+            }).catch(() => {
+                alert('客服微信：Dream1314520ss');
+            });
+        }
+
+        // 点击遮罩关闭弹窗
+        document.getElementById('paymentModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
         // 初始化
-        renderProducts();
-        saveCart();
+        init();
     </script>
 </body>
 </html>
