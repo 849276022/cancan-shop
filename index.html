@@ -141,21 +141,22 @@
             <p class="modal-amount">¥<span id="payAmount">0</span></p>
             <div class="qr-codes">
                 <div class="qr-code">
-                    <span>📷</span>
-                    <span>微信收款码</span>
+                    <img src="images/微信收款码.png" style="width:90%;height:90%;object-contain;border-radius:8px;" alt="微信收款码">
+                    <span>微信支付</span>
                 </div>
                 <div class="qr-code">
-                    <span>📷</span>
-                    <span>支付宝收款码</span>
+                    <img src="images/支付宝收款码.jpg" style="width:90%;height:90%;object-contain;border-radius:8px;" alt="支付宝收款码">
+                    <span>支付宝</span>
                 </div>
             </div>
             <div class="payment-note">
                 <strong>支付说明：</strong><br>
                 1. 扫码支付后，请截图保存支付凭证<br>
                 2. 添加客服微信发送凭证<br>
-                3. 确认收款后安排发货
+                3. 确认收款后安排发货<br>
+                4. 发货地址：广西南宁
             </div>
-            <p class="contact-info">客服微信：<strong>cancan-shop</strong></p>
+            <p class="contact-info">客服微信：<strong>Dream1314520ss</strong></p>
             <button class="modal-close" onclick="closeModal()">关闭</button>
         </div>
     </div>
@@ -164,17 +165,15 @@
     <footer>
         <div class="content">
             <p>© 2026 灿宝的店 - 版权所有</p>
-            <p class="sub">客服微信：cancan-shop</p>
+            <p class="sub">客服微信：Dream1314520ss</p>
         </div>
     </footer>
 
     <script>
-        // 商品数据 - 灿宝可以修改这里
+        // 商品数据 - 灿宝的店
         const products = [
-            { id: 1, name: '示例商品1', price: 99, desc: '这是示例商品描述，可以修改为真实商品信息', specs: ['材质：优质材料', '尺寸：标准', '产地：中国'] },
-            { id: 2, name: '示例商品2', price: 199, desc: '第二个示例商品，可以添加更多详情', specs: ['材质：环保材料', '尺寸：大号', '产地：中国'] },
-            { id: 3, name: '示例商品3', price: 299, desc: '第三个示例商品，支持自定义', specs: ['材质：进口材料', '尺寸：定制', '产地：中国'] },
-            { id: 4, name: '示例商品4', price: 399, desc: '第四个示例商品，可以替换图片', specs: ['材质：高级材料', '尺寸：标准', '产地：中国'] },
+            { id: 1, name: '草莓', price: 3, desc: '广西kingking群主家里种的新鲜草莓，香甜可口', specs: ['产地：广西', '来源：kingking群主家自种', '特点：新鲜采摘，香甜多汁', '发货：广西南宁发货'] },
+            { id: 2, name: '葡萄', price: 6, desc: '来自广西kingking群胜产葡萄，颗粒饱满，汁多味甜', specs: ['产地：广西', '来源：kingking群胜产葡萄', '特点：颗粒饱满，汁多味甜', '发货：广西南宁发货'] },
         ];
 
         // 购物车数据
@@ -183,9 +182,10 @@
         // 显示商品列表
         function renderProducts() {
             const list = document.getElementById('productsList');
+            const images = ['', 'images/商品1草莓.jpg', 'images/商品2葡萄.jpg'];
             list.innerHTML = products.map(p => `
                 <div class="product-card" onclick="showProduct(${p.id})">
-                    <div class="product-image">商品图片 ${p.id}</div>
+                    <div class="product-image"><img src="${images[p.id]}" style="width:100%;height:100%;object-fit:cover;" alt="${p.name}"></div>
                     <div class="product-info">
                         <div class="product-name">${p.name}</div>
                         <div class="product-desc">${p.desc}</div>
@@ -204,8 +204,9 @@
             document.getElementById('productPage').style.display = 'block';
             document.getElementById('cartPage').style.display = 'none';
             
+            const detailImages = ['', 'images/商品1草莓.jpg', 'images/商品2葡萄.jpg'];
             document.getElementById('productDetail').innerHTML = `
-                <div class="detail-image">商品图片 ${p.id}</div>
+                <div class="detail-image"><img src="${detailImages[p.id]}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;" alt="${p.name}"></div>
                 <div class="detail-info">
                     <h2>${p.name}</h2>
                     <p>${p.desc}</p>
@@ -280,7 +281,7 @@
                 `<h2 style="margin-bottom: 24px;">购物车</h2>
                 ${cart.map((item, idx) => `
                     <div class="cart-item">
-                        <div class="cart-item-image">商品${item.id}</div>
+                        <div class="cart-item-image"><img src="images/商品${item.id == 1 ? '草莓' : '葡萄'}.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:8px;" alt="${item.name}"></div>
                         <div class="cart-item-info">
                             <div class="cart-item-name">${item.name}</div>
                             <div class="cart-item-price">¥${item.price} × ${item.qty}</div>
