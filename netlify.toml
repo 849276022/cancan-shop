@@ -1,6 +1,7 @@
 [build]
-  command = "echo 'Build complete'"
+  command = "npm install"
   publish = "pwa"
+  functions = "netlify/functions"
 
 [[redirects]]
   from = "/api/*"
