@@ -20,13 +20,13 @@ exports.handler = async (event, context) => {
       }
       
       const user = result.rows[0];
-      const valid = await bcrypt.compare(password, user.password);
+      const valid = await bcrypt.compare(password, user.password_hash);
       if (!valid) {
         return { statusCode: 200, body: JSON.stringify({ success: false, error: '用户名或密码错误' }) };
       }
       
       const token = jwt.sign(
-        { id: user.id, username: user.username, role: user.role },
+        { id: user.id, username: user.username, role: 'admin' },
         JWT_SECRET,
         { expiresIn: '7d' }
       );
@@ -36,7 +36,7 @@ exports.handler = async (event, context) => {
         body: JSON.stringify({
           success: true,
           token,
-          user: { id: user.id, username: user.username, role: user.role }
+          user: { id: user.id, username: user.username, nickname: user.nickname, role: 'admin' }
         })
       };
     } catch (err) {
