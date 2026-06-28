@@ -7,7 +7,7 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 });
 
-const JWT_SECRET = proces…CRET || 'lost-person-secret-key-2026';
+const JWT_SECRET = process.env.JWT_SECRET || 'lost-person-secret-key-2026';
 
 exports.handler = async (event, context) => {
   if (event.httpMethod === 'POST') {
