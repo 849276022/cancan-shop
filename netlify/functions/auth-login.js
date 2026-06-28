@@ -13,16 +13,22 @@ exports.handler = async (event, context) => {
   if (event.httpMethod === 'POST') {
     try {
       const { username, password } = JSON.parse(event.body);
+      
+      // Debug: check if DATABASE_URL is set
+      if (!process.env.DATABASE_URL) {
+        return { statusCode: 500, body: JSON.stringify({ success: false, error: 'DATABASE_URL not set' }) };
+      }
+      
       const result = await pool.query("SELECT * FROM users WHERE username = $1", [username]);
       
       if (result.rows.length === 0) {
-        return { statusCode: 200, body: JSON.stringify({ success: false, error: '用户名或密码错误' }) };
+        return { statusCode: 200, body: JSON.stringify({ success: false, error: '用户不存在' }) };
       }
       
       const user = result.rows[0];
       const valid = await bcrypt.compare(password, user.password_hash);
       if (!valid) {
-        return { statusCode: 200, body: JSON.stringify({ success: false, error: '用户名或密码错误' }) };
+        return { statusCode: 200, body: JSON.stringify({ success: false, error: '密码错误' }) };
       }
       
       const token = jwt.sign(
