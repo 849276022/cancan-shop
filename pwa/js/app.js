@@ -40,7 +40,7 @@ function checkAuth() {
 
 async function verifyToken(token) {
   try {
-    const res = await fetch(`${API_BASE}/auth/verify`, {
+    const res = await fetch(`${API_BASE}/auth-verify`, {
       headers: { 'Authorization': `Bearer ${token}` }
     });
     const data = await res.json();
@@ -74,7 +74,7 @@ async function login() {
   }
 
   try {
-    const res = await fetch(`${API_BASE}/auth/login`, {
+    const res = await fetch(`${API_BASE}/auth-login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password })
@@ -179,7 +179,7 @@ function initStations() {
 // ========== 数据加载 ==========
 async function loadPersons() {
   try {
-    const res = await fetch(`${API_BASE}/persons`, {
+    const res = await fetch(`${API_BASE}/persons-list`, {
       headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
     });
     const data = await res.json();
@@ -381,7 +381,7 @@ async function savePerson() {
   };
   
   try {
-    const url = editingId ? `${API_BASE}/persons/${editingId}` : `${API_BASE}/persons`;
+    const url = editingId ? `${API_BASE}/persons-update` : `${API_BASE}/persons-create`;
     const method = editingId ? 'PUT' : 'POST';
     
     const res = await fetch(url, {
@@ -411,8 +411,8 @@ async function deletePerson(id) {
   if (!confirm(`确定删除「${person ? person.name : ''}」的信息吗？`)) return;
   
   try {
-    const res = await fetch(`${API_BASE}/persons/${id}`, {
-      method: 'DELETE',
+    const res = await fetch(`${API_BASE}/persons-delete`, {
+      method: 'POST',
       headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
     });
     const data = await res.json();
@@ -466,7 +466,7 @@ async function doImport() {
   }
   
   try {
-    const res = await fetch(`${API_BASE}/persons/batch`, {
+    const res = await fetch(`${API_BASE}/persons-batch`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
