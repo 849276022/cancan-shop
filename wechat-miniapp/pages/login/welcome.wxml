@@ -1,0 +1,61 @@
+<!-- 欢迎页 -->
+<view class="container">
+  <!-- Logo区域 -->
+  <view class="logo-section">
+    <view class="logo-icon">🚇</view>
+    <view class="app-name">地铁走失管理</view>
+    <view class="slogan">帮助每一个走失的人回家</view>
+  </view>
+
+  <!-- 登录区域 -->
+  <view class="login-section">
+    <button 
+      class="wechat-login-btn" 
+      open-type="getPhoneNumber" 
+      bind:getphonenumber="onGetPhoneNumber"
+      disabled="{{loading}}"
+    >
+      <text class="wechat-icon">💬</text>
+      <text>{{loading ? '登录中...' : '微信一键登录'}}</text>
+    </button>
+
+    <!-- 协议勾选 -->
+    <view class="agreement-section">
+      <checkbox-group bindchange="onAgreementChange">
+        <label class="agreement-label">
+          <checkbox value="agree" checked="{{agreed}}" color="#1E5AA8"/>
+          <text class="agreement-text">
+            我已阅读并同意
+            <text class="link" bindtap="onViewUserAgreement">《用户协议》</text>
+            和
+            <text class="link" bindtap="onViewPrivacyPolicy">《隐私政策》</text>
+          </text>
+        </label>
+      </checkbox-group>
+    </view>
+  </view>
+
+  <!-- 底部安全提示 -->
+  <view class="footer">
+    <view class="security-tips">
+      <text class="lock-icon">🔒</text>
+      <text>您的信息将受到严格保护</text>
+    </view>
+    <view class="authority-tips">
+      官方认证 · 数据安全 · 隐私保护
+    </view>
+  </view>
+
+  <!-- 隐私协议弹窗 -->
+  <view class="modal {{showAgreementModal ? 'show' : ''}}" bindtap="closeModal">
+    <view class="modal-content" catchtap="preventBubble">
+      <view class="modal-title">{{modalTitle}}</view>
+      <scroll-view class="modal-body" scroll-y>
+        <text>{{modalContent}}</text>
+      </scroll-view>
+      <view class="modal-footer">
+        <button class="modal-btn" bindtap="closeModal">我知道了</button>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,118 @@
+<view class="container">
+  <!-- 搜索 -->
+  <view class="search-box">
+    <text class="search-icon">🔍</text>
+    <input type="text" placeholder="搜索姓名、操作类型、站点..." value="{{searchText}}" bindinput="onSearch"/>
+  </view>
+
+  <!-- 筛选 -->
+  <view class="filter-bar">
+    <picker bindchange="onTypeChange" value="{{typeIndex}}" range="{{typeOptions}}">
+      <view class="filter-item">{{typeOptions[typeIndex]}} ▾</view>
+    </picker>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{filteredRecords.length === 0}}">
+    <text class="empty-icon">📋</text>
+    <text class="empty-text">暂无处理记录</text>
+    <text class="empty-tip">点击右下角 + 添加记录</text>
+  </view>
+
+  <!-- 时间线 -->
+  <view class="timeline">
+    <block wx:for="{{filteredRecords}}" wx:key="id">
+      <view class="timeline-item {{item.typeClass}}">
+        <view class="timeline-content card">
+          <view class="timeline-header">
+            <view class="timeline-type-badge">
+              <text class="timeline-title">{{item.type}}</text>
+            </view>
+            <text class="timeline-time">{{item.date}} {{item.time}}</text>
+          </view>
+          <view class="timeline-body">
+            <text class="timeline-name">{{item.personName}}</text>
+            <text class="timeline-result" wx:if="{{item.result}}"> · {{item.result}}</text>
+          </view>
+          <view class="timeline-tags">
+            <text class="tag tag-station">🏢 {{item.station}}</text>
+            <text class="tag tag-person">👤 {{item.handler}}</text>
+          </view>
+          <view class="record-action">
+            <text class="delete-action" bindtap="deleteRecord" data-id="{{item.id}}">🗑️ 删除</text>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <!-- 新增按钮 -->
+  <view class="fab-container">
+    <view class="fab-btn primary" bindtap="showModal" style="width:104rpx;height:104rpx;">
+      <text class="fab-icon" style="font-size:48rpx;">+</text>
+    </view>
+  </view>
+</view>
+
+<!-- 新增记录模态框 -->
+<view class="modal-overlay" wx:if="{{showModal}}" bindtap="hideModal">
+  <view class="modal-content" catchtap="stopPropagation">
+    <view class="modal-header">
+      <text class="modal-title">➕ 新增处理记录</text>
+      <text class="modal-close" bindtap="hideModal">✕</text>
+    </view>
+    <scroll-view class="modal-body" scroll-y enhanced show-scrollbar="{{false}}">
+      <view class="form-section-title">📝 记录信息</view>
+      <view class="form-row">
+        <view class="form-group half">
+          <text class="form-label">日期</text>
+          <picker mode="date" bindchange="inputDate" value="{{form.date}}">
+            <view class="form-picker">{{form.date || '选择日期'}}</view>
+          </picker>
+        </view>
+        <view class="form-group half">
+          <text class="form-label">时间</text>
+          <picker mode="time" bindchange="inputTime" value="{{form.time}}">
+            <view class="form-picker">{{form.time || '选择时间'}}</view>
+          </picker>
+        </view>
+      </view>
+      <view class="form-row">
+        <view class="form-group half">
+          <text class="form-label">人员姓名 *</text>
+          <input placeholder="请输入姓名" value="{{form.personName}}" bindinput="inputPersonName" class="form-input"/>
+        </view>
+        <view class="form-group half">
+          <text class="form-label">操作类型</text>
+          <picker bindchange="inputType" value="{{form.typeIndex}}" range="{{['发现','登记','联系家属','移交派出所','核实身份']}}">
+            <view class="form-picker">{{form.type || '请选择'}}</view>
+          </picker>
+        </view>
+      </view>
+      <view class="form-row">
+        <view class="form-group half">
+          <text class="form-label">处理站点</text>
+          <picker bindchange="inputStation" value="{{form.stationIndex}}" range="{{['西津','安吉客运站','苏卢','三十三中','秀厢','南宁剧场','福建园','亭洪路','石柱岭','江南客运站','大沙田','建设路','石子塘','金象','玉洞','东风路','玉岭路','那福路','坛泽']}}">
+            <view class="form-picker">{{form.station || '选择站点'}}</view>
+          </picker>
+        </view>
+        <view class="form-group half">
+          <text class="form-label">处理人</text>
+          <input placeholder="处理人" value="{{form.handler}}" bindinput="inputHandler" class="form-input"/>
+        </view>
+      </view>
+      <view class="form-group">
+        <text class="form-label">处理结果</text>
+        <input placeholder="请输入处理结果" value="{{form.result}}" bindinput="inputResult" class="form-input"/>
+      </view>
+      <view class="form-group">
+        <text class="form-label">备注</text>
+        <textarea placeholder="备注信息" value="{{form.remark}}" bindinput="inputRemark" class="form-textarea"/>
+      </view>
+    </scroll-view>
+    <view class="modal-footer">
+      <view class="btn-cancel" bindtap="hideModal">取消</view>
+      <view class="btn-confirm" bindtap="saveRecord">保存</view>
+    </view>
+  </view>
+</view>

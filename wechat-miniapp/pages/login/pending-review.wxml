@@ -1,0 +1,72 @@
+<!-- 等待审核页 -->
+<view class="container">
+  <view class="status-section">
+    <view class="status-icon">
+      <image src="/images/pending.png"></image>
+    </view>
+    <view class="status-title">信息审核中</view>
+    <view class="status-desc">
+      您的身份信息已提交，工作人员将在1-3个工作日内完成审核
+    </view>
+  </view>
+
+  <view class="info-section">
+    <view class="info-title">审核进度</view>
+    <view class="progress-list">
+      <view class="progress-item completed">
+        <view class="progress-dot"></view>
+        <view class="progress-content">
+          <view class="progress-label">提交信息</view>
+          <view class="progress-time">已完成</view>
+        </view>
+      </view>
+      <view class="progress-line completed"></view>
+      
+      <view class="progress-item completed">
+        <view class="progress-dot"></view>
+        <view class="progress-content">
+          <view class="progress-label">身份核验</view>
+          <view class="progress-time">已完成</view>
+        </view>
+      </view>
+      <view class="progress-line active"></view>
+      
+      <view class="progress-item active">
+        <view class="progress-dot"></view>
+        <view class="progress-content">
+          <view class="progress-label">人工审核</view>
+          <view class="progress-time">审核中...</view>
+        </view>
+      </view>
+      <view class="progress-line"></view>
+      
+      <view class="progress-item">
+        <view class="progress-dot"></view>
+        <view class="progress-content">
+          <view class="progress-label">审核完成</view>
+          <view class="progress-time">等待中</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="notice-section">
+    <view class="notice-title">
+      <image src="/images/notice.png"></image>
+      <text>注意事项</text>
+    </view>
+    <view class="notice-list">
+      <view class="notice-item">• 审核期间您可以浏览公开信息</view>
+      <view class="notice-item">• 审核结果将通过微信通知您</view>
+      <view class="notice-item">• 如有疑问请联系客服：400-xxx-xxxx</view>
+    </view>
+  </view>
+
+  <view class="footer">
+    <button class="home-btn" bindtap="goHome">先浏览首页</button>
+    <view class="refresh-tips" bindtap="checkStatus">
+      <text>刷新状态</text>
+      <image class="refresh-icon {{checking ? 'spin' : ''}}" src="/images/refresh.png"></image>
+    </view>
+  </view>
+</view>

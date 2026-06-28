@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#0f172a">
+  <title>走失人员管理系统</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="images/icon-192.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- 登录页 -->
+    <div id="login-page" class="page active">
+      <div class="login-container">
+        <div class="login-logo">🔍</div>
+        <h1 class="login-title">走失人员管理系统</h1>
+        <p class="login-subtitle">v8 PWA</p>
+        
+        <div class="login-form">
+          <input type="text" id="login-username" placeholder="用户名" class="login-input">
+          <input type="password" id="login-password" placeholder="密码" class="login-input">
+          <button id="login-btn" class="login-btn">登录</button>
+        </div>
+        
+        <div class="login-footer">
+          <label class="agreement-checkbox">
+            <input type="checkbox" id="agree-checkbox">
+            <span>我已阅读并同意<a href="#" id="show-agreement">用户协议</a>和<a href="#" id="show-privacy">隐私政策</a></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 主页面 -->
+    <div id="main-page" class="page">
+      <!-- 头部统计 -->
+      <div class="header-stats">
+        <div class="stat-item">
+          <span class="stat-num" id="stat-total">0</span>
+          <span class="stat-desc">总人数</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num stat-pending" id="stat-pending">0</span>
+          <span class="stat-desc">待核实</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num stat-found" id="stat-found">0</span>
+          <span class="stat-desc">已找到</span>
+        </div>
+      </div>
+
+      <!-- 搜索栏 -->
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search-input" placeholder="搜索姓名、身份证、地点...">
+      </div>
+
+      <!-- 筛选栏 -->
+      <div class="filter-bar">
+        <select id="filter-status" class="filter-select">
+          <option value="0">全部状态</option>
+          <option value="1">待核实</option>
+          <option value="2">已找到家属</option>
+          <option value="3">处理中</option>
+          <option value="4">已移交</option>
+        </select>
+        <select id="filter-station" class="filter-select">
+          <option value="0">全部站点</option>
+        </select>
+      </div>
+
+      <!-- 人员列表 -->
+      <div id="person-list" class="person-list"></div>
+
+      <!-- 空状态 -->
+      <div id="empty-state" class="empty-state" style="display:none;">
+        <span class="empty-icon">🔍</span>
+        <span class="empty-text">暂无走失人员记录</span>
+        <span class="empty-tip">点击下方按钮添加</span>
+      </div>
+
+      <!-- 底部按钮 -->
+      <div class="fab-container">
+        <button class="fab-btn success" id="import-btn">
+          <span class="fab-icon">📥</span>
+          <span class="fab-label">导入</span>
+        </button>
+        <button class="fab-btn primary" id="add-btn">
+          <span class="fab-icon">+</span>
+          <span class="fab-label">新增</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 新增/编辑弹窗 -->
+    <div id="modal-overlay" class="modal-overlay" style="display:none;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="modal-title" id="modal-title">➕ 新增人员</span>
+          <span class="modal-close" id="modal-close">✕</span>
+        </div>
+        <div class="modal-body">
+          <div class="form-section-title">📋 基本信息</div>
+          
+          <div class="form-group">
+            <label class="form-label">📷 人员照片</label>
+            <div class="photo-upload-area">
+              <div id="photo-preview" class="photo-preview" style="display:none;">
+                <img id="photo-img" src="" alt="">
+                <span class="photo-remove" id="photo-remove">×</span>
+              </div>
+              <div id="photo-upload-btn" class="photo-upload-btn">
+                <span class="photo-upload-icon">📷</span>
+                <span class="photo-upload-text">点击上传照片</span>
+              </div>
+              <input type="file" id="photo-input" accept="image/*" style="display:none;">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">姓名 *</label>
+            <input type="text" id="form-name" class="form-input" placeholder="输入姓名">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group half">
+              <label class="form-label">性别</label>
+              <select id="form-gender" class="form-select">
+                <option value="男">男</option>
+                <option value="女">女</option>
+              </select>
+            </div>
+            <div class="form-group half">
+              <label class="form-label">年龄</label>
+              <input type="number" id="form-age" class="form-input" placeholder="年龄">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">身份证号</label>
+            <input type="text" id="form-idcard" class="form-input" placeholder="身份证号">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group half">
+              <label class="form-label">发现时间</label>
+              <input type="date" id="form-foundtime" class="form-input">
+            </div>
+            <div class="form-group half">
+              <label class="form-label">状态</label>
+              <select id="form-status" class="form-select">
+                <option value="待核实">待核实</option>
+                <option value="处理中">处理中</option>
+                <option value="已找到家属">已找到家属</option>
+                <option value="已移交">已移交</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">发现地点</label>
+            <input type="text" id="form-foundlocation" class="form-input" placeholder="发现地点">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">所属站点</label>
+            <select id="form-station" class="form-select"></select>
+          </div>
+
+          <div class="form-section-title">👤 家属信息</div>
+
+          <div class="form-group">
+            <label class="form-label">家属姓名</label>
+            <input type="text" id="form-familyname" class="form-input" placeholder="家属姓名">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">联系电话</label>
+            <input type="tel" id="form-familyphone" class="form-input" placeholder="联系电话">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group half">
+              <label class="form-label">关系</label>
+              <input type="text" id="form-familyrelation" class="form-input" placeholder="如：儿子">
+            </div>
+            <div class="form-group half">
+              <label class="form-label">住址</label>
+              <input type="text" id="form-familyaddress" class="form-input" placeholder="家庭住址">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">备注</label>
+            <textarea id="form-remark" class="form-textarea" placeholder="备注信息"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-cancel" id="btn-cancel">取消</button>
+          <button class="btn-confirm" id="btn-save">保存</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 导入弹窗 -->
+    <div id="import-modal" class="modal-overlay" style="display:none;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="modal-title">📥 Excel/文本导入</span>
+          <span class="modal-close" id="import-close">✕</span>
+        </div>
+        <div class="modal-body">
+          <div class="import-tip">
+            从 Excel 复制粘贴，制表符分隔：姓名 性别 年龄 身份证 发现时间 发现地点 状态 站点 家属姓名 电话 关系 住址 备注
+          </div>
+          <textarea id="import-textarea" class="import-textarea" placeholder="粘贴 Excel 内容..."></textarea>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-cancel" id="import-cancel">取消</button>
+          <button class="btn-confirm" id="import-confirm">识别导入</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 协议弹窗 -->
+    <div id="agreement-modal" class="modal-overlay" style="display:none;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="modal-title" id="agreement-title">用户协议</span>
+          <span class="modal-close" id="agreement-close">✕</span>
+        </div>
+        <div class="modal-body" id="agreement-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

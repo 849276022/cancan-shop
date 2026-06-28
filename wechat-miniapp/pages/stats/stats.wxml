@@ -1,0 +1,73 @@
+<view class="container">
+  <!-- 站点分布 -->
+  <view class="stat-card">
+    <view class="stat-title">🏢 处理站点分布</view>
+    <view class="bar-chart">
+      <block wx:for="{{stationStats}}" wx:key="name">
+        <view class="bar-item">
+          <text class="bar-label">{{item.name}}</text>
+          <view class="bar-track">
+            <view class="bar-fill {{item.color}}" style="width: {{item.percent}}%">
+              <text class="bar-value">{{item.value}}</text>
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 操作类型分布 -->
+  <view class="stat-card">
+    <view class="stat-title">📊 操作类型分布</view>
+    <view class="pie-section">
+      <view class="pie-chart-container">
+        <canvas type="2d" id="typePie" class="pie-canvas"></canvas>
+      </view>
+      <view class="pie-legend">
+        <block wx:for="{{typeStats}}" wx:key="name">
+          <view class="legend-item">
+            <view class="legend-dot" style="background: {{item.color}}"></view>
+            <text>{{item.name}} ({{item.value}})</text>
+          </view>
+        </block>
+      </view>
+    </view>
+  </view>
+
+  <!-- 人员状态分布 -->
+  <view class="stat-card">
+    <view class="stat-title">👥 人员状态分布</view>
+    <view class="bar-chart">
+      <block wx:for="{{statusStats}}" wx:key="name">
+        <view class="bar-item">
+          <text class="bar-label">{{item.name}}</text>
+          <view class="bar-track">
+            <view class="bar-fill {{item.color}}" style="width: {{item.percent}}%">
+              <text class="bar-value">{{item.value}}</text>
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 近期趋势 -->
+  <view class="stat-card">
+    <view class="stat-title">📈 近期趋势</view>
+    <view class="trend-header">
+      <text class="trend-subtitle">最近30天</text>
+    </view>
+    <view class="bar-chart">
+      <block wx:for="{{trendStats}}" wx:key="date">
+        <view class="bar-item">
+          <text class="bar-label">{{item.date}}</text>
+          <view class="bar-track">
+            <view class="bar-fill blue" style="width: {{item.percent}}%">
+              <text class="bar-value">{{item.value}}</text>
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+</view>

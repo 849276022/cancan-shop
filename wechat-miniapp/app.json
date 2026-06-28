@@ -1,0 +1,46 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/records/records",
+    "pages/stats/stats",
+    "pages/login/welcome",
+    "pages/login/select-role",
+    "pages/login/complete-profile",
+    "pages/login/pending-review"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#0f172a",
+    "navigationBarTitleText": "走失人员管理系统",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#0f172a"
+  },
+  "tabBar": {
+    "backgroundColor": "#0f172a",
+    "color": "#64748b",
+    "selectedColor": "#60a5fa",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "人员",
+        "iconPath": "images/icon-person.png",
+        "selectedIconPath": "images/icon-person-active.png"
+      },
+      {
+        "pagePath": "pages/records/records",
+        "text": "记录",
+        "iconPath": "images/icon-record.png",
+        "selectedIconPath": "images/icon-record-active.png"
+      },
+      {
+        "pagePath": "pages/stats/stats",
+        "text": "统计",
+        "iconPath": "images/icon-stats.png",
+        "selectedIconPath": "images/icon-stats-active.png"
+      }
+    ]
+  },
+  "usingComponents": {},
+  "sitemapLocation": "sitemap.json"
+}

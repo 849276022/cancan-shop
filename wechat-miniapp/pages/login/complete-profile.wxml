@@ -1,0 +1,166 @@
+<!-- 信息补充页 -->
+<view class="container">
+  <view class="header">
+    <view class="step-indicator">
+      <view class="step {{step >= 1 ? 'active' : ''}}">
+        <view class="step-num">1</view>
+        <text>选择身份</text>
+      </view>
+      <view class="step-line"></view>
+      <view class="step {{step >= 2 ? 'active' : ''}}">
+        <view class="step-num">2</view>
+        <text>完善信息</text>
+      </view>
+      <view class="step-line"></view>
+      <view class="step">
+        <view class="step-num">3</view>
+        <text>等待审核</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="form-section">
+    <view class="section-title">{{roleTitle}}</view>
+    
+    <!-- 家属表单 -->
+    <block wx:if="{{role === 'family'}}">
+      <view class="form-item">
+        <text class="label">真实姓名</text>
+        <input 
+          class="input" 
+          placeholder="请输入您的真实姓名" 
+          value="{{form.name}}"
+          bindinput="onInput"
+          data-field="name"
+        />
+      </view>
+      
+      <view class="form-item">
+        <text class="label">与走失者关系</text>
+        <picker bindchange="onRelationChange" value="{{relationIndex}}" range="{{relations}}">
+          <view class="picker {{form.relation ? '' : 'placeholder'}}">
+            {{form.relation || '请选择关系'}}
+            <image class="arrow" src="/images/arrow-right.png"></image>
+          </view>
+        </picker>
+      </view>
+
+      <view class="form-item">
+        <text class="label">身份证号</text>
+        <input 
+          class="input" 
+          placeholder="用于身份验证" 
+          value="{{form.idCard}}"
+          bindinput="onInput"
+          data-field="idCard"
+          maxlength="18"
+        />
+      </view>
+
+      <view class="form-item">
+        <text class="label">现居住地址</text>
+        <textarea 
+          class="textarea" 
+          placeholder="请输入您的现居住地址" 
+          value="{{form.address}}"
+          bindinput="onInput"
+          data-field="address"
+        />
+      </view>
+    </block>
+
+    <!-- 工作人员表单 -->
+    <block wx:if="{{role === 'staff'}}">
+      <view class="form-item">
+        <text class="label">真实姓名</text>
+        <input 
+          class="input" 
+          placeholder="请输入真实姓名" 
+          value="{{form.name}}"
+          bindinput="onInput"
+          data-field="name"
+        />
+      </view>
+
+      <view class="form-item">
+        <text class="label">工号</text>
+        <input 
+          class="input" 
+          placeholder="请输入你的工号" 
+          value="{{form.employeeId}}"
+          bindinput="onInput"
+          data-field="employeeId"
+        />
+      </view>
+
+      <view class="form-item">
+        <text class="label">所属线路</text>
+        <picker bindchange="onLineChange" value="{{lineIndex}}" range="{{lines}}">
+          <view class="picker {{form.line ? '' : 'placeholder'}}">
+            {{form.line || '请选择线路'}}
+            <image class="arrow" src="/images/arrow-right.png"></image>
+          </view>
+        </picker>
+      </view>
+
+      <view class="form-item">
+        <text class="label">所属站点</text>
+        <picker bindchange="onStationChange" value="{{stationIndex}}" range="{{stations}}">
+          <view class="picker {{form.station ? '' : 'placeholder'}}">
+            {{form.station || '请选择站点'}}
+            <image class="arrow" src="/images/arrow-right.png"></image>
+          </view>
+        </picker>
+      </view>
+    </block>
+
+    <!-- 管理员表单 -->
+    <block wx:if="{{role === 'admin'}}">
+      <view class="form-item">
+        <text class="label">邀请码</text>
+        <input 
+          class="input" 
+          placeholder="请输入管理员邀请码" 
+          value="{{form.inviteCode}}"
+          bindinput="onInput"
+          data-field="inviteCode"
+        />
+      </view>
+
+      <view class="form-item">
+        <text class="label">设置密码</text>
+        <input 
+          class="input" 
+          placeholder="请设置6-20位密码" 
+          type="password"
+          value="{{form.password}}"
+          bindinput="onInput"
+          data-field="password"
+        />
+      </view>
+
+      <view class="form-item">
+        <text class="label">确认密码</text>
+        <input 
+          class="input" 
+          placeholder="请再次输入密码" 
+          type="password"
+          value="{{form.confirmPassword}}"
+          bindinput="onInput"
+          data-field="confirmPassword"
+        />
+      </view>
+    </block>
+
+    <view class="tips">
+      <image class="tip-icon" src="/images/info.png"></image>
+      <text>您的信息仅用于身份验证，我们将严格保密</text>
+    </view>
+  </view>
+
+  <view class="footer">
+    <button class="submit-btn {{isValid ? 'active' : ''}}" bindtap="submit" disabled="{{!isValid || loading}}">
+      {{loading ? '提交中...' : '提交审核'}}
+    </button>
+  </view>
+</view>

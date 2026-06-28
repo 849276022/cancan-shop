@@ -1,0 +1,60 @@
+<!-- 角色选择页 -->
+<view class="container">
+  <view class="header">
+    <view class="title">请选择您的身份</view>
+    <view class="subtitle">不同身份对应不同的权限和功能</view>
+  </view>
+
+  <view class="role-list">
+    <!-- 家属/求助者 -->
+    <view class="role-card {{selectedRole === 'family' ? 'selected' : ''}}" bindtap="selectRole" data-role="family">
+      <view class="role-icon-wrapper family">
+        <image class="role-icon" src="/images/icon-family.png"></image>
+      </view>
+      <view class="role-info">
+        <view class="role-name">我是家属/求助者</view>
+        <view class="role-desc">发布寻人信息、查看寻人进展、接收匹配提醒</view>
+      </view>
+      <view class="check-icon {{selectedRole === 'family' ? 'show' : ''}}">
+        <image src="/images/check.png"></image>
+      </view>
+    </view>
+
+    <!-- 地铁工作人员 -->
+    <view class="role-card {{selectedRole === 'staff' ? 'selected' : ''}}" bindtap="selectRole" data-role="staff">
+      <view class="role-icon-wrapper staff">
+        <image class="role-icon" src="/images/icon-staff.png"></image>
+      </view>
+      <view class="role-info">
+        <view class="role-name">我是地铁工作人员</view>
+        <view class="role-desc">录入走失人员、更新状态、管理本线路信息</view>
+      </view>
+      <view class="check-icon {{selectedRole === 'staff' ? 'show' : ''}}">
+        <image src="/images/check.png"></image>
+      </view>
+    </view>
+
+    <!-- 系统管理员 -->
+    <view class="role-card {{selectedRole === 'admin' ? 'selected' : ''}}" bindtap="selectRole" data-role="admin">
+      <view class="role-icon-wrapper admin">
+        <image class="role-icon" src="/images/icon-admin.png"></image>
+      </view>
+      <view class="role-info">
+        <view class="role-name">我是系统管理员</view>
+        <view class="role-desc">系统配置、用户管理、数据审计、全局管理</view>
+      </view>
+      <view class="check-icon {{selectedRole === 'admin' ? 'show' : ''}}">
+        <image src="/images/check.png"></image>
+      </view>
+    </view>
+  </view>
+
+  <view class="footer">
+    <button class="confirm-btn {{selectedRole ? 'active' : ''}}" bindtap="confirmRole" disabled="{{!selectedRole || loading}}">
+      {{loading ? '提交中...' : '确认身份'}}
+    </button>
+    <view class="tips">
+      * 身份选择后需要审核，请确保信息真实有效
+    </view>
+  </view>
+</view>

@@ -1,0 +1,245 @@
+<view class="container">
+  <!-- 头部统计卡片 -->
+  <view class="header-stats">
+    <view class="stat-item">
+      <text class="stat-num">{{stats.total}}</text>
+      <text class="stat-desc">总人数</text>
+    </view>
+    <view class="stat-item">
+      <text class="stat-num stat-pending">{{stats.pending}}</text>
+      <text class="stat-desc">待核实</text>
+    </view>
+    <view class="stat-item">
+      <text class="stat-num stat-found">{{stats.found}}</text>
+      <text class="stat-desc">已找到</text>
+    </view>
+  </view>
+
+  <!-- 搜索框 -->
+  <view class="search-bar">
+    <text class="search-icon">🔍</text>
+    <input placeholder="搜索姓名、身份证、地点..." value="{{searchText}}" bindinput="onSearch"/>
+  </view>
+
+  <!-- 筛选 -->
+  <view class="filter-bar">
+    <picker bindchange="onStatusChange" value="{{statusIndex}}" range="{{statusOptions}}">
+      <view class="filter-item">{{statusOptions[statusIndex]}} ▾</view>
+    </picker>
+    <picker bindchange="onStationChange" value="{{stationIndex}}" range="{{stationOptions}}">
+      <view class="filter-item">{{stationOptions[stationIndex]}} ▾</view>
+    </picker>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:if="{{filteredPersons.length === 0}}" class="empty-state">
+    <text class="empty-icon">🔍</text>
+    <text class="empty-text">暂无走失人员记录</text>
+    <text class="empty-tip">点击下方按钮添加</text>
+  </view>
+
+  <!-- 人员列表 -->
+  <view class="person-list">
+    <view wx:for="{{filteredPersons}}" wx:key="id" class="person-card card">
+      <!-- 卡片头部：头像 + 信息 -->
+      <view class="card-header">
+        <view class="person-avatar" bindtap="previewPersonPhoto" data-url="{{item.photoUrl}}">
+          <image wx:if="{{item.photoUrl}}" class="avatar-img" src="{{item.photoUrl}}" mode="aspectFill"/>
+          <text wx:else class="avatar-text">{{item.name[0] || '?'}}</text>
+        </view>
+        <view class="person-info">
+          <text class="person-name">{{item.name}}</text>
+          <text class="person-meta">{{item.gender}} · {{item.age}}岁 · {{item.station || '—'}}</text>
+        </view>
+        <view class="status-tag {{item.statusClass}}">{{item.status}}</view>
+      </view>
+
+      <!-- 照片展示（大图） -->
+      <view wx:if="{{item.photoUrl}}" class="card-photo" bindtap="previewPersonPhoto" data-url="{{item.photoUrl}}">
+        <image class="photo-img" src="{{item.photoUrl}}" mode="aspectFill"/>
+      </view>
+
+      <!-- 卡片详情 -->
+      <view class="card-body">
+        <view class="info-row">
+          <text class="info-label">身份证</text>
+          <text class="info-value">{{item.idCard || '—'}}</text>
+        </view>
+        <view class="info-row">
+          <text class="info-label">发现时间</text>
+          <text class="info-value">{{item.foundTime || '—'}}</text>
+        </view>
+        <view class="info-row">
+          <text class="info-label">发现地点</text>
+          <text class="info-value">{{item.foundLocation || '—'}}</text>
+        </view>
+
+        <!-- 家属信息 -->
+        <view wx:if="{{item.familyName || item.familyPhone}}" class="family-section">
+          <view class="family-title">👤 家属信息</view>
+          <view class="info-row">
+            <text class="info-label">姓名</text>
+            <text class="info-value">{{item.familyName || '—'}}</text>
+          </view>
+          <view class="info-row" wx:if="{{item.familyPhone}}">
+            <text class="info-label">电话</text>
+            <text class="info-value phone" bindtap="callPhone" data-phone="{{item.familyPhone}}">{{item.familyPhone}}</text>
+          </view>
+          <view class="info-row">
+            <text class="info-label">关系</text>
+            <text class="info-value">{{item.familyRelation || '—'}}</text>
+          </view>
+          <view class="info-row" wx:if="{{item.familyAddress}}">
+            <text class="info-label">住址</text>
+            <text class="info-value">{{item.familyAddress}}</text>
+          </view>
+        </view>
+
+        <view wx:if="{{item.remark}}" class="info-row" style="margin-top:8rpx;">
+          <text class="info-label">备注</text>
+          <text class="info-value">{{item.remark}}</text>
+        </view>
+      </view>
+
+      <!-- 操作按钮 -->
+      <view class="card-actions">
+        <view class="action-btn edit-btn" bindtap="editPerson" data-id="{{item.id}}">✏️ 编辑</view>
+        <view class="action-btn delete-btn" bindtap="deletePerson" data-id="{{item.id}}">🗑️ 删除</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部浮动按钮 -->
+  <view class="fab-container">
+    <view class="fab-btn success" bindtap="showImport">
+      <text class="fab-icon">📥</text>
+      <text class="fab-label">导入</text>
+    </view>
+    <view class="fab-btn primary" bindtap="showModal">
+      <text class="fab-icon">+</text>
+      <text class="fab-label">新增</text>
+    </view>
+  </view>
+</view>
+
+<!-- 新增/编辑模态框 -->
+<view wx:if="{{showModal}}" class="modal-overlay" bindtap="hideModal">
+  <view class="modal-content" catchtap="stopPropagation">
+    <view class="modal-header">
+      <text class="modal-title">{{isEditing ? '✏️ 编辑人员' : '➕ 新增人员'}}</text>
+      <text class="modal-close" bindtap="hideModal">✕</text>
+    </view>
+    <scroll-view class="modal-body" scroll-y enhanced show-scrollbar="{{false}}">
+      <view class="form-section-title">📋 基本信息</view>
+
+      <!-- 照片上传区域 -->
+      <view class="form-group">
+        <text class="form-label">📷 人员照片</text>
+        <view class="photo-upload-area">
+          <view wx:if="{{form.photoUrl}}" class="photo-preview-container">
+            <image class="photo-preview-img" src="{{form.photoUrl}}" mode="aspectFill" bindtap="previewPhoto" data-url="{{form.photoUrl}}"/>
+            <view class="photo-remove" bindtap="removePhoto">×</view>
+          </view>
+          <view wx:else class="photo-upload-btn" bindtap="choosePhoto">
+            <text class="photo-upload-icon">📷</text>
+            <text class="photo-upload-text">{{uploading ? '上传中...' : '点击上传照片'}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">姓名 *</text>
+        <input class="form-input" placeholder="输入姓名" bindinput="inputName" value="{{form.name}}"/>
+      </view>
+      <view class="form-row">
+        <view class="form-group half">
+          <text class="form-label">性别</text>
+          <picker bindchange="inputGender" range="{{['男','女']}}" value="{{form.genderIndex}}">
+            <view class="form-picker">{{form.gender || '男'}}</view>
+          </picker>
+        </view>
+        <view class="form-group half">
+          <text class="form-label">年龄</text>
+          <input class="form-input" type="number" placeholder="年龄" bindinput="inputAge" value="{{form.age}}"/>
+        </view>
+      </view>
+      <view class="form-group">
+        <text class="form-label">身份证号</text>
+        <input class="form-input" placeholder="身份证号" bindinput="inputIdCard" value="{{form.idCard}}"/>
+      </view>
+      <view class="form-row">
+        <view class="form-group half">
+          <text class="form-label">发现时间</text>
+          <picker mode="date" bindchange="inputFoundTime" value="{{form.foundTime}}">
+            <view class="form-picker">{{form.foundTime || '选择日期'}}</view>
+          </picker>
+        </view>
+        <view class="form-group half">
+          <text class="form-label">状态</text>
+          <picker bindchange="inputStatus" range="{{['待核实','处理中','已找到家属','已移交']}}" value="{{form.statusIndex}}">
+            <view class="form-picker">{{form.status || '待核实'}}</view>
+          </picker>
+        </view>
+      </view>
+      <view class="form-group">
+        <text class="form-label">发现地点</text>
+        <input class="form-input" placeholder="发现地点" bindinput="inputFoundLocation" value="{{form.foundLocation}}"/>
+      </view>
+      <view class="form-group">
+        <text class="form-label">所属站点</text>
+        <picker bindchange="inputStation" range="{{stationOptions}}" value="{{form.stationIndex}}">
+          <view class="form-picker">{{form.station || '选择站点'}}</view>
+        </picker>
+      </view>
+
+      <view class="form-section-title">👤 家属信息</view>
+      <view class="form-group">
+        <text class="form-label">家属姓名</text>
+        <input class="form-input" placeholder="家属姓名" bindinput="inputFamilyName" value="{{form.familyName}}"/>
+      </view>
+      <view class="form-group">
+        <text class="form-label">联系电话</text>
+        <input class="form-input" type="number" placeholder="联系电话" bindinput="inputFamilyPhone" value="{{form.familyPhone}}"/>
+      </view>
+      <view class="form-row">
+        <view class="form-group half">
+          <text class="form-label">关系</text>
+          <input class="form-input" placeholder="如：儿子" bindinput="inputFamilyRelation" value="{{form.familyRelation}}"/>
+        </view>
+        <view class="form-group half">
+          <text class="form-label">住址</text>
+          <input class="form-input" placeholder="家庭住址" bindinput="inputFamilyAddress" value="{{form.familyAddress}}"/>
+        </view>
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">备注</text>
+        <textarea class="form-textarea" placeholder="备注信息" bindinput="inputRemark" value="{{form.remark}}"/>
+      </view>
+    </scroll-view>
+    <view class="modal-footer">
+      <view class="btn-cancel" bindtap="hideModal">取消</view>
+      <view class="btn-confirm" bindtap="savePerson">{{isEditing ? '更新' : '保存'}}</view>
+    </view>
+  </view>
+</view>
+
+<!-- 导入模态框 -->
+<view wx:if="{{showImportModal}}" class="modal-overlay" bindtap="hideImport">
+  <view class="modal-content" catchtap="stopPropagation">
+    <view class="modal-header">
+      <text class="modal-title">📥 Excel/文本导入</text>
+      <text class="modal-close" bindtap="hideImport">✕</text>
+    </view>
+    <scroll-view class="modal-body" scroll-y>
+      <view class="import-tip">
+        从 Excel 复制粘贴，制表符分隔：姓名 性别 年龄 身份证 发现时间 发现地点 状态 站点 家属姓名 电话 关系 住址 备注
+      </view>
+      <textarea class="import-textarea" placeholder="粘贴 Excel 内容..." bindinput="inputImport" value="{{importText}}"/>
+    </scroll-view>
+    <view class="modal-footer">
+      <view class="btn-cancel" bindtap="hideImport">取消</view>
+      <view class="btn-confirm" bindtap="parseImport">识别导入</view>
+    </view>
+  </view>
+</view>
