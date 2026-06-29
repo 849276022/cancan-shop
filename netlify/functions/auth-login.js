@@ -52,3 +52,4 @@ exports.handler = async (event, context) => {
   
   return { statusCode: 405, body: JSON.stringify({ error: 'Method not allowed' }) };
 };
+// Force redeploy Mon Jun 29 03:11:25 UTC 2026
