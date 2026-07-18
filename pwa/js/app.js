@@ -179,8 +179,9 @@ function initStations() {
 // ========== 数据加载 ==========
 async function loadPersons() {
   try {
-    const res = await fetch(`${API_BASE}/persons`, {
-      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+    const res = await fetch(`${API_BASE}/persons?t=${Date.now()}`, {
+      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+      cache: 'no-store'
     });
     const data = await res.json();
     

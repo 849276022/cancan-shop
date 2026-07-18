@@ -1,4 +1,4 @@
-const CACHE_NAME = 'lost-person-v8';
+const CACHE_NAME = 'lost-person-v9';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -32,6 +32,12 @@ self.addEventListener('activate', event => {
 
 // 请求拦截
 self.addEventListener('fetch', event => {
+  // API 请求不走缓存，直接走网络
+  if (event.request.url.includes('/api/') || event.request.url.includes('/.netlify/functions/')) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+  
   event.respondWith(
     caches.match(event.request)
       .then(response => {
