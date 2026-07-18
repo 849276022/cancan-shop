@@ -1,21 +1,22 @@
-const CACHE_NAME = 'lost-person-v9';
+const CACHE_NAME = 'lost-person-v10';
 const urlsToCache = [
   '/',
   '/index.html',
   '/css/style.css',
-  '/js/app.js',
+  '/js/app.js?v=20260718',
   '/manifest.json'
 ];
 
-// 安装
+// 安装时立即激活
 self.addEventListener('install', event => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => cache.addAll(urlsToCache))
   );
 });
 
-// 激活
+// 激活时清理旧缓存并立即控制页面
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(cacheNames => {
@@ -28,6 +29,7 @@ self.addEventListener('activate', event => {
       );
     })
   );
+  self.clients.claim();
 });
 
 // 请求拦截
