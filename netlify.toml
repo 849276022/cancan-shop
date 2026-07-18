@@ -9,7 +9,7 @@
 
 [[redirects]]
   from = "/api/persons/:id"
-  to = "/.netlify/functions/persons"
+  to = "/.netlify/functions/persons?id=:id"
   status = 200
 
 [[redirects]]

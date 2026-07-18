@@ -47,9 +47,13 @@ exports.handler = async (event, context) => {
 
   const method = event.httpMethod;
   const path = event.path || '';
-  // 从 URL 提取 id: /api/persons/123 → id=123
-  const idMatch = path.match(/\/persons\/(\d+)/);
-  const id = idMatch ? idMatch[1] : null;
+  // 从查询参数或 URL 提取 id: /api/persons/123 → id=123
+  const queryParams = event.queryStringParameters || {};
+  let id = queryParams.id || null;
+  if (!id) {
+    const idMatch = path.match(/\/persons\/(\d+)/);
+    id = idMatch ? idMatch[1] : null;
+  }
   
   // GET /api/persons - 列表
   if (method === 'GET') {
@@ -85,7 +89,6 @@ exports.handler = async (event, context) => {
   // PUT /api/persons/:id - 更新
   if (method === 'PUT') {
     try {
-      const { id } = event.pathParameters || {};
       const { name, gender, age, idCard, foundTime, foundLocation, status, station,
               familyName, familyPhone, familyRelation, familyAddress, photoUrl, remark } = JSON.parse(event.body);
       
@@ -106,7 +109,6 @@ exports.handler = async (event, context) => {
   // DELETE /api/persons/:id - 删除
   if (method === 'DELETE') {
     try {
-      const { id } = event.pathParameters || {};
       await pool.query('DELETE FROM persons WHERE id = $1', [id]);
       return { statusCode: 200, body: JSON.stringify({ success: true }) };
     } catch (err) {
