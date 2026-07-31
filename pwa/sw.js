@@ -1,4 +1,4 @@
-const CACHE_NAME = 'lost-person-v10';
+const CACHE_NAME = 'lost-person-v11';
 const urlsToCache = [
   '/',
   '/index.html',

@@ -10,6 +10,8 @@ let persons = [];
 let filteredPersons = [];
 let editingId = null;
 let photoUrl = '';
+let importType = 'person'; // 'person' or 'abnormal'
+let parsedItems = []; // 解析后的数据
 
 // ========== 初始化 ==========
 document.addEventListener('DOMContentLoaded', () => {
@@ -125,8 +127,7 @@ function initEventListeners() {
   document.getElementById('add-btn').addEventListener('click', () => showModal());
   
   // ========== 导入相关 ==========
-  let importType = 'person'; // 'person' or 'abnormal'
-  let parsedItems = []; // 解析后的数据
+  // importType 和 parsedItems 已在全局声明
 
   // 导入弹窗打开
   document.getElementById('import-btn').addEventListener('click', () => {
