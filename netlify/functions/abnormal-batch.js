@@ -24,9 +24,7 @@ exports.handler = async (event) => {
     } catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
-      client.release();
-    }
+    } finally { client.release(); }
   } catch (error) {
     return { statusCode: 500, body: JSON.stringify({ success: false, error: error.message }) };
   }
