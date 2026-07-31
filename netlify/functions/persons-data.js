@@ -23,7 +23,8 @@ exports.handler = async (event) => {
              last_seen_location, last_seen_time, description,
              status, created_by, created_at, updated_at,
              id_card, found_time, found_location, station,
-             family_name, family_phone, family_relation, family_address, remark
+             family_name, family_phone, family_relation, family_address, remark,
+             (photo_url IS NOT NULL AND photo_url <> '') AS has_photo
       FROM public.persons
       ORDER BY created_at DESC
     `);
@@ -38,7 +39,8 @@ exports.handler = async (event) => {
       familyRelation: r.family_relation, familyAddress: r.family_address,
       remark: r.remark,
       // 列表不传大图片；详情图片后续通过独立接口按需获取。
-      photoUrl: null
+      photoUrl: null,
+      hasPhoto: Boolean(r.has_photo)
     }));
     return { statusCode: 200, body: JSON.stringify({ success: true, data }) };
   } catch (error) {

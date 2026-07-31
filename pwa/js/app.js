@@ -293,11 +293,30 @@ async function loadPersons() {
       persons = data.data;
       updateStats();
       filterPersons();
+      // 列表不携带大图片；仅为确实有图片的记录按需加载。
+      loadPersonPhotos();
     } else {
       showToast('加载失败');
     }
   } catch (err) {
     showToast('网络错误');
+  }
+}
+
+async function loadPersonPhotos() {
+  const targets = persons.filter(p => p.hasPhoto && !p.photoUrl);
+  // 控制并发，避免同时下载多张大图片导致浏览器或函数过载。
+  for (let i = 0; i < targets.length; i += 3) {
+    await Promise.all(targets.slice(i, i + 3).map(async person => {
+      try {
+        const res = await fetch(`${API_BASE}/persons/${encodeURIComponent(person.id)}/photo`, {
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }, cache: 'no-store'
+        });
+        const result = await res.json();
+        if (result.success && result.photoUrl) person.photoUrl = result.photoUrl;
+      } catch (err) { console.warn('Photo load failed:', person.id, err); }
+    }));
+    filterPersons();
   }
 }
 
@@ -570,9 +589,16 @@ async function savePerson() {
     
     const result = await res.json();
     if (result.success) {
+      const savedId = editingId;
       hideModal();
+      // 先把当前保存结果写回前端，图片无需等待列表接口返回正文。
+      if (savedId) {
+        const current = persons.find(p => String(p.id) === String(savedId));
+        if (current) { current.photoUrl = photoUrl || null; current.hasPhoto = Boolean(photoUrl); }
+      }
+      filterPersons();
       loadPersons();
-      showToast(editingId ? '更新成功' : '保存成功');
+      showToast(savedId ? '更新成功' : '保存成功');
     } else {
       showToast(result.error || '操作失败');
     }
