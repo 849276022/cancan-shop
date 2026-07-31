@@ -12,7 +12,19 @@ exports.handler = async (event) => {
   if (token !== FIXED_TOKEN) {
     return { statusCode: 401, body: JSON.stringify({ success: false, error: '未登录' }) };
   }
-  const id = event.queryStringParameters?.id;
+  // Netlify 在重写动态路由时，不同运行时可能不会填充 queryStringParameters；两种方式都兼容。
+  const id = event.queryStringParameters?.id || (event.path || '').match(/\/persons\/(\d+)(?:\/|$)/)?.[1];
+  if (event.httpMethod === 'DELETE') {
+    if (!id) return { statusCode: 400, body: JSON.stringify({ success: false, error: '缺少人员编号' }) };
+    try {
+      const result = await pool.query('DELETE FROM public.persons WHERE id=$1 RETURNING id', [id]);
+      if (!result.rows.length) return { statusCode: 404, body: JSON.stringify({ success: false, error: '人员不存在' }) };
+      return { statusCode: 200, body: JSON.stringify({ success: true }) };
+    } catch (error) {
+      console.error('persons delete error:', error);
+      return { statusCode: 500, body: JSON.stringify({ success: false, error: error.message }) };
+    }
+  }
   if (event.httpMethod === 'PUT') {
     if (!id) return { statusCode: 400, body: JSON.stringify({ success: false, error: '缺少人员编号' }) };
     try {
