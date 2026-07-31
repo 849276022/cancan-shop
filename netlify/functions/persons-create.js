@@ -1,22 +1,19 @@
 const { Pool } = require('pg');
-const jwt = require('jsonwebtoken');
-
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false }
 });
 
-const JWT_SECRET = 'king-dating-jwt-secret-2026';
+const FIXED_TOKEN = 'king-dating-jwt-secret-2026';
 
 function auth(event) {
-  const token = event.headers.authorization?.replace('Bearer ', '');
-  if (!token) return null;
-  try { return jwt.verify(token, JWT_SECRET); } catch { return null; }
+  const header = event.headers?.authorization || event.headers?.Authorization || '';
+  return header.replace(/^Bearer\s+/i, '') === FIXED_TOKEN;
 }
 
 exports.handler = async (event) => {
-  const user = auth(event);
-  if (!user) return { statusCode: 401, body: JSON.stringify({ success: false, error: '未登录' }) };
+  const authenticated = auth(event);
+  if (!authenticated) return { statusCode: 401, body: JSON.stringify({ success: false, error: '未登录' }) };
 
   try {
     const { name, gender, age, idCard, foundTime, foundLocation, status, station,
@@ -28,7 +25,7 @@ exports.handler = async (event) => {
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
       RETURNING *
     `, [name, gender, age, idCard, foundTime, foundLocation, status, station,
-        familyName, familyPhone, familyRelation, familyAddress, photoUrl, remark, user.id]);
+        familyName, familyPhone, familyRelation, familyAddress, photoUrl, remark, 1]);
     
     return { statusCode: 200, body: JSON.stringify({ success: true, data: result.rows[0] }) };
   } catch (err) {
