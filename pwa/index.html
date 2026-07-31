@@ -37,50 +37,80 @@
 
     <!-- 主页面 -->
     <div id="main-page" class="page">
-      <!-- 头部统计 -->
-      <div class="header-stats">
-        <div class="stat-item">
-          <span class="stat-num" id="stat-total">0</span>
-          <span class="stat-desc">总人数</span>
+      <!-- 标签页切换 -->
+      <div class="main-tabs" style="display:flex;gap:8px;margin-bottom:16px;">
+        <button id="main-tab-person" class="main-tab active" style="flex:1;padding:12px;border:2px solid #3b82f6;border-radius:8px;background:#1e3a5f;color:#fff;cursor:pointer;font-size:14px;font-weight:bold;">走失人员</button>
+        <button id="main-tab-abnormal" class="main-tab" style="flex:1;padding:12px;border:2px solid #475569;border-radius:8px;background:#1e293b;color:#94a3b8;cursor:pointer;font-size:14px;">异常乘客</button>
+      </div>
+
+      <!-- 走失人员内容 -->
+      <div id="person-content">
+        <!-- 头部统计 -->
+        <div class="header-stats">
+          <div class="stat-item">
+            <span class="stat-num" id="stat-total">0</span>
+            <span class="stat-desc">总人数</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num stat-pending" id="stat-pending">0</span>
+            <span class="stat-desc">待核实</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num stat-found" id="stat-found">0</span>
+            <span class="stat-desc">已找到</span>
+          </div>
         </div>
-        <div class="stat-item">
-          <span class="stat-num stat-pending" id="stat-pending">0</span>
-          <span class="stat-desc">待核实</span>
+
+        <!-- 搜索栏 -->
+        <div class="search-bar">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="search-input" placeholder="搜索姓名、身份证、地点...">
         </div>
-        <div class="stat-item">
-          <span class="stat-num stat-found" id="stat-found">0</span>
-          <span class="stat-desc">已找到</span>
+
+        <!-- 筛选栏 -->
+        <div class="filter-bar">
+          <select id="filter-status" class="filter-select">
+            <option value="0">全部状态</option>
+            <option value="1">待核实</option>
+            <option value="2">已找到家属</option>
+            <option value="3">处理中</option>
+            <option value="4">已移交</option>
+          </select>
+          <select id="filter-station" class="filter-select">
+            <option value="0">全部站点</option>
+          </select>
+        </div>
+
+        <!-- 人员列表 -->
+        <div id="person-list" class="person-list"></div>
+
+        <!-- 空状态 -->
+        <div id="empty-state" class="empty-state" style="display:none;">
+          <span class="empty-icon">🔍</span>
+          <span class="empty-text">暂无走失人员记录</span>
+          <span class="empty-tip">点击下方按钮添加</span>
         </div>
       </div>
 
-      <!-- 搜索栏 -->
-      <div class="search-bar">
-        <span class="search-icon">🔍</span>
-        <input type="text" id="search-input" placeholder="搜索姓名、身份证、地点...">
-      </div>
+      <!-- 异常乘客内容 -->
+      <div id="abnormal-content" style="display:none;">
+        <!-- 异常乘客统计 -->
+        <div class="header-stats">
+          <div class="stat-item">
+            <span class="stat-num" id="abnormal-total">0</span>
+            <span class="stat-desc">总记录</span>
+          </div>
+        </div>
 
-      <!-- 筛选栏 -->
-      <div class="filter-bar">
-        <select id="filter-status" class="filter-select">
-          <option value="0">全部状态</option>
-          <option value="1">待核实</option>
-          <option value="2">已找到家属</option>
-          <option value="3">处理中</option>
-          <option value="4">已移交</option>
-        </select>
-        <select id="filter-station" class="filter-select">
-          <option value="0">全部站点</option>
-        </select>
-      </div>
+        <!-- 异常乘客列表 -->
+        <div id="abnormal-list" class="person-list"></div>
 
-      <!-- 人员列表 -->
-      <div id="person-list" class="person-list"></div>
-
-      <!-- 空状态 -->
-      <div id="empty-state" class="empty-state" style="display:none;">
-        <span class="empty-icon">🔍</span>
-        <span class="empty-text">暂无走失人员记录</span>
-        <span class="empty-tip">点击下方按钮添加</span>
+        <!-- 异常乘客空状态 -->
+        <div id="abnormal-empty" class="empty-state" style="display:none;">
+          <span class="empty-icon">📋</span>
+          <span class="empty-text">暂无异常乘客记录</span>
+          <span class="empty-tip">点击下方导入按钮添加</span>
+        </div>
       </div>
 
       <!-- 底部按钮 -->

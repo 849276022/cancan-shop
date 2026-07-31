@@ -120,6 +120,34 @@ function initEventListeners() {
   // 登录
   document.getElementById('login-btn').addEventListener('click', login);
   
+  // 主标签页切换
+  document.getElementById('main-tab-person').addEventListener('click', () => {
+    document.getElementById('main-tab-person').style.border = '2px solid #3b82f6';
+    document.getElementById('main-tab-person').style.background = '#1e3a5f';
+    document.getElementById('main-tab-person').style.color = '#fff';
+    document.getElementById('main-tab-person').style.fontWeight = 'bold';
+    document.getElementById('main-tab-abnormal').style.border = '2px solid #475569';
+    document.getElementById('main-tab-abnormal').style.background = '#1e293b';
+    document.getElementById('main-tab-abnormal').style.color = '#94a3b8';
+    document.getElementById('main-tab-abnormal').style.fontWeight = 'normal';
+    document.getElementById('person-content').style.display = 'block';
+    document.getElementById('abnormal-content').style.display = 'none';
+  });
+  
+  document.getElementById('main-tab-abnormal').addEventListener('click', () => {
+    document.getElementById('main-tab-abnormal').style.border = '2px solid #3b82f6';
+    document.getElementById('main-tab-abnormal').style.background = '#1e3a5f';
+    document.getElementById('main-tab-abnormal').style.color = '#fff';
+    document.getElementById('main-tab-abnormal').style.fontWeight = 'bold';
+    document.getElementById('main-tab-person').style.border = '2px solid #475569';
+    document.getElementById('main-tab-person').style.background = '#1e293b';
+    document.getElementById('main-tab-person').style.color = '#94a3b8';
+    document.getElementById('main-tab-person').style.fontWeight = 'normal';
+    document.getElementById('person-content').style.display = 'none';
+    document.getElementById('abnormal-content').style.display = 'block';
+    loadAbnormal();
+  });
+  
   // 搜索
   document.getElementById('search-input').addEventListener('input', filterPersons);
   document.getElementById('filter-status').addEventListener('change', filterPersons);
@@ -271,6 +299,58 @@ async function loadPersons() {
   } catch (err) {
     showToast('网络错误');
   }
+}
+
+async function loadAbnormal() {
+  try {
+    const res = await fetch(`${API_BASE}/abnormal?t=${Date.now()}`, {
+      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+      cache: 'no-store'
+    });
+    const data = await res.json();
+    
+    if (data.success) {
+      abnormalPassengers = data.data;
+      document.getElementById('abnormal-total').textContent = abnormalPassengers.length;
+      renderAbnormalList();
+    } else {
+      showToast('加载异常乘客失败');
+    }
+  } catch (err) {
+    showToast('网络错误');
+  }
+}
+
+function renderAbnormalList() {
+  const list = document.getElementById('abnormal-list');
+  const empty = document.getElementById('abnormal-empty');
+  
+  if (abnormalPassengers.length === 0) {
+    list.style.display = 'none';
+    empty.style.display = 'flex';
+    return;
+  }
+  
+  list.style.display = 'block';
+  empty.style.display = 'none';
+  
+  list.innerHTML = abnormalPassengers.map(item => `
+    <div class="person-card" style="padding:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <span style="font-weight:bold;font-size:16px;color:#e2e8f0;">${item.name || '未知'}</span>
+        <span style="font-size:12px;color:#64748b;">${item.occurTime || ''}</span>
+      </div>
+      <div style="font-size:13px;color:#94a3b8;line-height:1.6;">
+        <div>📍 ${item.station || '未知站点'}</div>
+        ${item.abnormalBehavior ? `<div>⚠️ ${item.abnormalBehavior}</div>` : ''}
+        ${item.gender ? `<div>👤 ${item.gender}</div>` : ''}
+        ${item.phone ? `<div>📞 ${item.phone}</div>` : ''}
+        ${item.commonExit ? `<div>🚪 常行出入口: ${item.commonExit}</div>` : ''}
+        ${item.hasFamily ? `<div>👨‍👩‍👧 家属陪同: ${item.hasFamily}</div>` : ''}
+        ${item.incidentDesc ? `<div>📝 ${item.incidentDesc}</div>` : ''}
+      </div>
+    </div>
+  `).join('');
 }
 
 function updateStats() {
