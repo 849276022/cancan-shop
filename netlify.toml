@@ -3,6 +3,11 @@
   publish = "pwa"
 
 [[redirects]]
+  from = "/api/abnormal/batch"
+  to = "/.netlify/functions/abnormal-batch"
+  status = 200
+
+[[redirects]]
   from = "/api/persons/batch"
   to = "/.netlify/functions/persons-batch"
   status = 200
