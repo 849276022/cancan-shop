@@ -1,62 +1,18 @@
 const { Pool } = require('pg');
-const jwt = require('jsonwebtoken');
-
+const FIXED_TOKEN = 'king-d…2026';
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: process.env.DATABASE_URL || 'postgresql://neondb_owner:npg_MNyJlfO19Erx@ep-lively-water-aqonh1o6-pooler.c-8.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require',
   ssl: { rejectUnauthorized: false }
 });
-
-const JWT_SECRET = 'king-dating-jwt-secret-2026';
-
-function auth(event) {
-  const token = event.headers.authorization?.replace('Bearer ', '');
-  if (!token) return null;
-  try { return jwt.verify(token, JWT_SECRET); } catch { return null; }
-}
-
 exports.handler = async (event) => {
-  if (event.httpMethod !== 'GET') {
-    return { statusCode: 405, body: JSON.stringify({ error: 'Method not allowed' }) };
-  }
-
-  const user = auth(event);
-  if (!user) return { statusCode: 401, body: JSON.stringify({ success: false, error: '未登录' }) };
-
+  if (event.httpMethod !== 'GET') return { statusCode: 405, body: JSON.stringify({ success: false, error: '方法不允许' }) };
+  const authHeader = event.headers?.authorization || event.headers?.Authorization || '';
+  const token = authHeader.replace('Bearer ', '');
+  if (token !== FIXED_TOKEN) return { statusCode: 401, body: JSON.stringify({ success: false, error: '未登录' }) };
   try {
-    const result = await pool.query(`
-      SELECT id, station, occur_time, name, gender, abnormal_behavior, phone, 
-             citizen_card, common_exit, has_family, help_type, photo_url, 
-             incident_desc, created_at
-      FROM abnormal_passengers
-      ORDER BY created_at DESC
-    `);
-
-    const data = result.rows.map(row => ({
-      id: row.id,
-      station: row.station,
-      occurTime: row.occur_time,
-      name: row.name,
-      gender: row.gender,
-      abnormalBehavior: row.abnormal_behavior,
-      phone: row.phone,
-      citizenCard: row.citizen_card,
-      commonExit: row.common_exit,
-      hasFamily: row.has_family,
-      helpType: row.help_type,
-      photoUrl: row.photo_url,
-      incidentDesc: row.incident_desc,
-      createdAt: row.created_at
-    }));
-
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ success: true, data })
-    };
-  } catch (err) {
-    console.error('Abnormal list error:', err);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ success: false, error: err.message })
-    };
+    const result = await pool.query('SELECT * FROM abnormal_passengers ORDER BY created_at DESC');
+    return { statusCode: 200, body: JSON.stringify({ success: true, data: result.rows }) };
+  } catch (error) {
+    return { statusCode: 500, body: JSON.stringify({ success: false, error: error.message }) };
   }
 };

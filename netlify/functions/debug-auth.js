@@ -18,13 +18,13 @@ exports.handler = async (event) => {
   return {
     statusCode: 200,
     body: JSON.stringify({
-      authHeader: authHeader.substring(0, 50),
+      jwtSecretUsed: JWT_SECRET,
+      jwtSecretLength: JWT_SECRET.length,
+      envJwtSecret: process.env.JWT_SECRET || '(not set)',
+      authHeaderPrefix: authHeader.substring(0, 10),
       tokenLength: token.length,
-      tokenPrefix: token.substring(0, 20),
-      jwtSecret: JWT_SECRET,
-      decoded: decoded,
       verifyError: verifyError,
-      allHeaders: Object.keys(headers)
+      decoded: decoded
     })
   };
 };
