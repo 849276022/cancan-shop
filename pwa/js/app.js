@@ -508,9 +508,27 @@ function hideModal() {
   photoUrl = '';
 }
 
-function editPerson(id) {
+async function editPerson(id) {
   const person = persons.find(p => p.id == id);
-  if (person) showModal(person);
+  if (!person) return;
+
+  // 图片按需加载，列表接口不携带大 Base64 图片。
+  showModal(person);
+  try {
+    const res = await fetch(`${API_BASE}/persons/${encodeURIComponent(id)}/photo`, {
+      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+      cache: 'no-store'
+    });
+    const data = await res.json();
+    if (data.success && data.photoUrl) {
+      photoUrl = data.photoUrl;
+      document.getElementById('photo-preview').style.display = 'block';
+      document.getElementById('photo-img').src = photoUrl;
+      document.getElementById('photo-upload-btn').style.display = 'none';
+    }
+  } catch (err) {
+    console.warn('Photo load failed:', err);
+  }
 }
 
 async function savePerson() {
