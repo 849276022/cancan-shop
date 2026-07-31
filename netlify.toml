@@ -27,7 +27,7 @@
 
 [[redirects]]
   from = "/api/persons"
-  to="/.netlify/functions/persons-probe"
+  to="/.netlify/functions/persons-data"
   status = 200
 
 [[redirects]]
