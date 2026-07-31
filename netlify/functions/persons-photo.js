@@ -17,7 +17,8 @@ exports.handler = async (event) => {
     return { statusCode: 401, body: JSON.stringify({ success: false, error: '未登录' }) };
   }
 
-  const id = event.queryStringParameters?.id;
+  // 同时兼容 Netlify 重写后的查询参数和动态路径。
+  const id = event.queryStringParameters?.id || (event.path || '').match(/\/persons\/(\d+)(?:\/photo)?(?:\/|$)/)?.[1];
   if (!id || !/^\d+$/.test(id)) {
     return { statusCode: 400, body: JSON.stringify({ success: false, error: '人员编号无效' }) };
   }
