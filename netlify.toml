@@ -16,6 +16,11 @@
   status = 200
 
 [[redirects]]
+  from = "/api/photos/upload"
+  to = "/.netlify/functions/photos-upload"
+  status = 200
+
+[[redirects]]
   from = "/api/persons/batch"
   to = "/.netlify/functions/persons-batch"
   status = 200

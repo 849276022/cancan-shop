@@ -810,13 +810,34 @@ function handlePhotoSelect(e) {
   }
   
   const reader = new FileReader();
-  reader.onload = (e) => {
-    photoUrl = e.target.result;
-    document.getElementById('photo-preview').style.display = 'block';
-    document.getElementById('photo-img').src = photoUrl;
-    document.getElementById('photo-upload-btn').style.display = 'none';
+  reader.onload = async (e) => {
+    try {
+      const compressed = await compressImage(e.target.result);
+      const res = await fetch(`${API_BASE}/photos/upload`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+        body: JSON.stringify({ dataUrl: compressed, personId: editingId || 'new' })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.error || '上传失败');
+      photoUrl = data.url;
+      document.getElementById('photo-preview').style.display = 'block';
+      document.getElementById('photo-img').src = photoUrl;
+      document.getElementById('photo-upload-btn').style.display = 'none';
+      showToast('图片已压缩并上传');
+    } catch (err) { showToast(err.message || '图片上传失败'); }
   };
   reader.readAsDataURL(file);
+}
+
+async function compressImage(dataUrl) {
+  const img = new Image();
+  img.src = dataUrl;
+  await new Promise((resolve, reject) => { img.onload = resolve; img.onerror = reject; });
+  const max = 1280, scale = Math.min(1, max / Math.max(img.width, img.height));
+  const canvas = document.createElement('canvas');
+  canvas.width = Math.max(1, Math.round(img.width * scale)); canvas.height = Math.max(1, Math.round(img.height * scale));
+  canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+  return canvas.toDataURL('image/jpeg', 0.82);
 }
 
 function removePhoto() {
