@@ -602,8 +602,16 @@ async function doImport() {
     items = [];
 
     for (const line of lines) {
-      // 支持制表符、逗号、多个空格分隔
-      const cols = line.split(/\t+|,|\s{2,}/).map(c => c.trim()).filter(c => c !== '');
+      // 智能分隔：优先制表符，其次逗号，最后多空格
+      let cols;
+      if (line.includes('\t')) {
+        cols = line.split('\t').map(c => c.trim());
+      } else if (line.includes(',')) {
+        cols = line.split(',').map(c => c.trim());
+      } else {
+        cols = line.split(/\s{2,}/).map(c => c.trim());
+      }
+      // 不过滤空值，保持列位置对应
       if (cols.length >= 2 && cols[0]) {
         if (importType === 'person') {
           items.push({
