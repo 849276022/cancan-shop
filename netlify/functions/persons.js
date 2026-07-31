@@ -1,9 +1,12 @@
 const { Pool } = require('pg');
 
 const FIXED_TOKEN = 'king-dating-jwt-secret-2026';
+const DATABASE_URL = 'postgresql://neondb_owner:npg_MNyJlfO19Erx@ep-lively-water-aqonh1o6-pooler.c-8.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require';
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || 'postgresql://neondb_owner:npg_MNyJlfO19Erx@ep-lively-water-aqonh1o6-pooler.c-8.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require',
-  ssl: { rejectUnauthorized: false }
+  // 使用已验证的 Neon 连接，避免 Netlify 环境变量指向旧/错误数据库。
+  connectionString: DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
+  connectionTimeoutMillis: 15000
 });
 
 exports.handler = async (event) => {
@@ -19,7 +22,12 @@ exports.handler = async (event) => {
 
   try {
     // 使用实际 persons 表字段，避免查询不存在的旧字段导致 Netlify 函数 500/502。
-    const result = await pool.query('SELECT * FROM persons ORDER BY created_at DESC');
+    const result = await pool.query(`
+      SELECT id, name, gender, age, id_card, found_time, found_location, status,
+             station, family_name, family_phone, family_relation, family_address,
+             photo_url, remark, height, weight, description, created_by, created_at, updated_at
+      FROM persons ORDER BY created_at DESC
+    `);
     const data = result.rows.map(r => ({
       id: r.id,
       name: r.name,
