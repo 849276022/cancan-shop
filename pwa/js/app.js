@@ -602,7 +602,8 @@ async function doImport() {
     items = [];
 
     for (const line of lines) {
-      const cols = line.split(/\t|,/).map(c => c.trim());
+      // 支持制表符、逗号、多个空格分隔
+      const cols = line.split(/\t+|,|\s{2,}/).map(c => c.trim()).filter(c => c !== '');
       if (cols.length >= 2 && cols[0]) {
         if (importType === 'person') {
           items.push({
