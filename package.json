@@ -6,7 +6,6 @@
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.22.0",
-    "xlsx": "^0.18.5",
-    "cos-nodejs-sdk-v5": "^2.15.0"
+    "xlsx": "^0.18.5"
   }
 }

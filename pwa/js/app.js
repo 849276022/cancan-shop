@@ -812,18 +812,14 @@ function handlePhotoSelect(e) {
   const reader = new FileReader();
   reader.onload = async (e) => {
     try {
+      // 不依赖第三方对象存储：压缩后直接保存 Base64，列表接口仍然排除图片。
       const compressed = await compressImage(e.target.result);
-      const res = await fetch(`${API_BASE}/photos/upload`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-        body: JSON.stringify({ dataUrl: compressed, personId: editingId || 'new' })
-      });
-      const data = await res.json();
-      if (!res.ok || !data.success) throw new Error(data.error || '上传失败');
-      photoUrl = data.url;
+      if (compressed.length > 4 * 1024 * 1024) throw new Error('压缩后图片仍过大，请选择更小的图片');
+      photoUrl = compressed;
       document.getElementById('photo-preview').style.display = 'block';
       document.getElementById('photo-img').src = photoUrl;
       document.getElementById('photo-upload-btn').style.display = 'none';
-      showToast('图片已压缩并上传');
+      showToast('图片已压缩');
     } catch (err) { showToast(err.message || '图片上传失败'); }
   };
   reader.readAsDataURL(file);
