@@ -13,6 +13,6 @@ exports.handler = async (event) => {
     const result = await pool.query('SELECT * FROM public.persons ORDER BY created_at DESC');
     return { statusCode: 200, body: JSON.stringify({ success: true, data: result.rows }) };
   } catch (error) {
-    return { statusCode: 500, body: JSON.stringify({ success: false, error: error.message }) };
+    return { statusCode: 200, body: JSON.stringify({ success: false, error: error.message, code: error.code, detail: error.detail, hint: error.hint }) };
   }
 };
