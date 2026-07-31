@@ -210,14 +210,36 @@
     <div id="import-modal" class="modal-overlay" style="display:none;">
       <div class="modal-content">
         <div class="modal-header">
-          <span class="modal-title">📥 Excel/文本导入</span>
+          <span class="modal-title">📥 Excel导入</span>
           <span class="modal-close" id="import-close">✕</span>
         </div>
         <div class="modal-body">
-          <div class="import-tip">
-            从 Excel 复制粘贴，制表符分隔：姓名 性别 年龄 身份证 发现时间 发现地点 状态 站点 家属姓名 电话 关系 住址 备注
+          <!-- 导入类型切换 -->
+          <div style="display:flex;gap:8px;margin-bottom:12px;">
+            <button id="tab-person" class="import-type-tab" style="flex:1;padding:10px;border:2px solid #3b82f6;border-radius:8px;background:#1e3a5f;color:#fff;cursor:pointer;font-size:14px;font-weight:bold;">走失人员</button>
+            <button id="tab-abnormal" class="import-type-tab" style="flex:1;padding:10px;border:2px solid #475569;border-radius:8px;background:#1e293b;color:#94a3b8;cursor:pointer;font-size:14px;">异常乘客</button>
           </div>
-          <textarea id="import-textarea" class="import-textarea" placeholder="粘贴 Excel 内容..."></textarea>
+
+          <!-- 文件上传区域 -->
+          <div id="file-upload-zone" style="border:2px dashed #475569;border-radius:12px;padding:24px;text-align:center;margin-bottom:12px;cursor:pointer;transition:border-color 0.2s;" onclick="document.getElementById('import-file-input').click()">
+            <span style="font-size:36px;">📁</span>
+            <p style="color:#94a3b8;margin:8px 0 0;font-size:14px;">点击上传 .xlsx 文件</p>
+            <p id="file-name-display" style="color:#3b82f6;margin:4px 0 0;font-size:13px;display:none;"></p>
+            <input type="file" id="import-file-input" accept=".xlsx,.xls" style="display:none;">
+          </div>
+
+          <!-- 预览表格 -->
+          <div id="import-preview" style="display:none;max-height:200px;overflow:auto;margin-bottom:12px;border:1px solid #334155;border-radius:8px;">
+            <table id="preview-table" style="width:100%;border-collapse:collapse;font-size:12px;"></table>
+          </div>
+
+          <!-- 文本粘贴（保留原功能） -->
+          <div id="paste-section">
+            <div id="import-tip-text" style="color:#94a3b8;font-size:13px;margin-bottom:8px;">
+              从 Excel 复制粘贴，制表符分隔：姓名 性别 年龄 身份证 发现时间 发现地点 状态 站点 家属姓名 电话 关系 住址 备注
+            </div>
+            <textarea id="import-textarea" class="import-textarea" placeholder="粘贴 Excel 内容..." style="width:100%;min-height:120px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:12px;font-size:14px;font-family:monospace;resize:vertical;"></textarea>
+          </div>
         </div>
         <div class="modal-footer">
           <button class="btn-cancel" id="import-cancel">取消</button>
@@ -226,7 +248,6 @@
       </div>
     </div>
 
-    <!-- 协议弹窗 -->
     <div id="agreement-modal" class="modal-overlay" style="display:none;">
       <div class="modal-content">
         <div class="modal-header">
@@ -238,6 +259,7 @@
     </div>
   </div>
 
-  <script src="js/app.js?v=20260718"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+  <script src="js/app.js?v=20260731"></script>
 </body>
 </html>

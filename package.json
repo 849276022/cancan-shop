@@ -4,7 +4,8 @@
   "description": "走失人员管理系统 PWA",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "jsonwebtoken": "^9.0.2",
-    "pg": "^8.11.3"
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.22.0",
+    "xlsx": "^0.18.5"
   }
 }

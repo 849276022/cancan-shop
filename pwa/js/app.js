@@ -124,9 +124,14 @@ function initEventListeners() {
   // 新增
   document.getElementById('add-btn').addEventListener('click', () => showModal());
   
-  // 导入
+  // ========== 导入相关 ==========
+  let importType = 'person'; // 'person' or 'abnormal'
+  let parsedItems = []; // 解析后的数据
+
+  // 导入弹窗打开
   document.getElementById('import-btn').addEventListener('click', () => {
     document.getElementById('import-modal').style.display = 'flex';
+    resetImportUI();
   });
   document.getElementById('import-close').addEventListener('click', () => {
     document.getElementById('import-modal').style.display = 'none';
@@ -135,6 +140,74 @@ function initEventListeners() {
     document.getElementById('import-modal').style.display = 'none';
   });
   document.getElementById('import-confirm').addEventListener('click', doImport);
+
+  // 导入类型切换
+  document.getElementById('tab-person').addEventListener('click', () => {
+    importType = 'person';
+    document.getElementById('tab-person').style.cssText = 'flex:1;padding:10px;border:2px solid #3b82f6;border-radius:8px;background:#1e3a5f;color:#fff;cursor:pointer;font-size:14px;font-weight:bold;';
+    document.getElementById('tab-abnormal').style.cssText = 'flex:1;padding:10px;border:2px solid #475569;border-radius:8px;background:#1e293b;color:#94a3b8;cursor:pointer;font-size:14px;';
+    document.getElementById('import-tip-text').textContent = '从 Excel 复制粘贴，制表符分隔：姓名 性别 年龄 身份证 发现时间 发现地点 状态 站点 家属姓名 电话 关系 住址 备注';
+    resetImportUI();
+  });
+  document.getElementById('tab-abnormal').addEventListener('click', () => {
+    importType = 'abnormal';
+    document.getElementById('tab-abnormal').style.cssText = 'flex:1;padding:10px;border:2px solid #3b82f6;border-radius:8px;background:#1e3a5f;color:#fff;cursor:pointer;font-size:14px;font-weight:bold;';
+    document.getElementById('tab-person').style.cssText = 'flex:1;padding:10px;border:2px solid #475569;border-radius:8px;background:#1e293b;color:#94a3b8;cursor:pointer;font-size:14px;';
+    document.getElementById('import-tip-text').textContent = '从 Excel 复制粘贴，制表符分隔：车站 发生时间 姓名 性别 异常行为 联系电话 市民卡号 常行出入口 是否有家属陪同 帮助特点 异常事件经过';
+    resetImportUI();
+  });
+
+  // 文件上传
+  document.getElementById('import-file-input').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    document.getElementById('file-name-display').textContent = '已选择: ' + file.name;
+    document.getElementById('file-name-display').style.display = 'block';
+
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const data = new Uint8Array(ev.target.result);
+        const wb = XLSX.read(data, { type: 'array' });
+        const ws = wb.Sheets[wb.SheetNames[0]];
+        const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
+
+        if (rows.length < 2) {
+          showToast('文件为空或只有表头');
+          return;
+        }
+
+        // 解析数据
+        parsedItems = parseExcelRows(rows, importType);
+
+        if (parsedItems.length === 0) {
+          showToast('未识别到有效数据');
+          return;
+        }
+
+        // 显示预览
+        showPreview(parsedItems, importType);
+        showToast(`识别到 ${parsedItems.length} 条数据`);
+      } catch (err) {
+        showToast('文件解析失败: ' + err.message);
+      }
+    };
+    reader.readAsArrayBuffer(file);
+  });
+
+  // 拖拽上传
+  const uploadZone = document.getElementById('file-upload-zone');
+  uploadZone.addEventListener('dragover', (e) => { e.preventDefault(); uploadZone.style.borderColor = '#3b82f6'; });
+  uploadZone.addEventListener('dragleave', () => { uploadZone.style.borderColor = '#475569'; });
+  uploadZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadZone.style.borderColor = '#475569';
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      document.getElementById('import-file-input').files = e.dataTransfer.files;
+      document.getElementById('import-file-input').dispatchEvent(new Event('change'));
+    }
+  });
   
   // 弹窗
   document.getElementById('modal-close').addEventListener('click', hideModal);
@@ -429,20 +502,23 @@ async function deletePerson(id) {
   }
 }
 
-// ========== 导入 ==========
-async function doImport() {
-  const text = document.getElementById('import-textarea').value.trim();
-  if (!text) {
-    showToast('请粘贴内容');
-    return;
-  }
-  
-  const lines = text.split(/\n|\r\n/).filter(l => l.trim());
+// ========== 导入辅助函数 ==========
+function resetImportUI() {
+  parsedItems = [];
+  document.getElementById('import-textarea').value = '';
+  document.getElementById('import-preview').style.display = 'none';
+  document.getElementById('file-name-display').style.display = 'none';
+  document.getElementById('import-file-input').value = '';
+}
+
+function parseExcelRows(rows, type) {
   const items = [];
-  
-  for (const line of lines) {
-    const cols = line.split(/\t|,/).map(c => c.trim());
-    if (cols.length >= 2 && cols[0]) {
+  // 跳过表头（第一行）
+  for (let i = 1; i < rows.length; i++) {
+    const cols = rows[i].map(c => String(c || '').trim());
+    if (!cols[0] && !cols[2]) continue; // 跳过空行
+
+    if (type === 'person') {
       items.push({
         name: cols[0] || '',
         gender: cols[1] || '男',
@@ -458,16 +534,125 @@ async function doImport() {
         familyAddress: cols[11] || '',
         remark: cols[12] || ''
       });
+    } else if (type === 'abnormal') {
+      items.push({
+        station: cols[0] || '',
+        occurTime: cols[1] || '',
+        name: cols[2] || '',
+        gender: cols[3] || '',
+        abnormalBehavior: cols[4] || '',
+        phone: cols[5] || '',
+        citizenCard: cols[6] || '',
+        commonExit: cols[7] || '',
+        hasFamily: cols[8] || '',
+        helpType: cols[9] || '',
+        photoUrl: cols[10] || '',
+        incidentDesc: cols[11] || ''
+      });
     }
   }
+  return items;
+}
+
+function showPreview(items, type) {
+  const preview = document.getElementById('import-preview');
+  const table = document.getElementById('preview-table');
   
+  let headers, keys;
+  if (type === 'person') {
+    headers = ['姓名', '性别', '年龄', '站点'];
+    keys = ['name', 'gender', 'age', 'station'];
+  } else {
+    headers = ['车站', '姓名', '性别', '异常行为'];
+    keys = ['station', 'name', 'gender', 'abnormalBehavior'];
+  }
+
+  let html = '<thead><tr>';
+  headers.forEach(h => html += `<th style="padding:6px;background:#1e293b;color:#94a3b8;border-bottom:1px solid #334155;">${h}</th>`);
+  html += '</tr></thead><tbody>';
+
+  items.slice(0, 10).forEach(item => {
+    html += '<tr>';
+    keys.forEach(k => html += `<td style="padding:6px;color:#e2e8f0;border-bottom:1px solid #1e293b;">${item[k] || '-'}</td>`);
+    html += '</tr>';
+  });
+
+  if (items.length > 10) {
+    html += `<tr><td colspan="${headers.length}" style="padding:6px;color:#64748b;text-align:center;">...还有 ${items.length - 10} 条</td></tr>`;
+  }
+
+  html += '</tbody>';
+  table.innerHTML = html;
+  preview.style.display = 'block';
+}
+
+// ========== 导入 ==========
+async function doImport() {
+  let items = parsedItems;
+
+  // 如果没有解析文件，尝试从文本框解析
+  if (items.length === 0) {
+    const text = document.getElementById('import-textarea').value.trim();
+    if (!text) {
+      showToast('请上传文件或粘贴内容');
+      return;
+    }
+
+    const lines = text.split(/\n|\r\n/).filter(l => l.trim());
+    items = [];
+
+    for (const line of lines) {
+      const cols = line.split(/\t|,/).map(c => c.trim());
+      if (cols.length >= 2 && cols[0]) {
+        if (importType === 'person') {
+          items.push({
+            name: cols[0] || '',
+            gender: cols[1] || '男',
+            age: parseInt(cols[2]) || 0,
+            idCard: cols[3] || '',
+            foundTime: cols[4] || new Date().toISOString().split('T')[0],
+            foundLocation: cols[5] || '',
+            status: cols[6] || '待核实',
+            station: cols[7] || STATIONS[0],
+            familyName: cols[8] || '',
+            familyPhone: cols[9] || '',
+            familyRelation: cols[10] || '',
+            familyAddress: cols[11] || '',
+            remark: cols[12] || ''
+          });
+        } else if (importType === 'abnormal') {
+          items.push({
+            station: cols[0] || '',
+            occurTime: cols[1] || '',
+            name: cols[2] || '',
+            gender: cols[3] || '',
+            abnormalBehavior: cols[4] || '',
+            phone: cols[5] || '',
+            citizenCard: cols[6] || '',
+            commonExit: cols[7] || '',
+            hasFamily: cols[8] || '',
+            helpType: cols[9] || '',
+            photoUrl: cols[10] || '',
+            incidentDesc: cols[11] || ''
+          });
+        }
+      }
+    }
+  }
+
   if (items.length === 0) {
     showToast('未识别到有效数据');
     return;
   }
-  
+
+  // 确认导入
+  if (!confirm(`确认导入 ${items.length} 条${importType === 'person' ? '走失人员' : '异常乘客'}记录？`)) {
+    return;
+  }
+
   try {
-    const res = await fetch(`${API_BASE}/persons/batch`, {
+    const endpoint = importType === 'person' ? '/persons/batch' : '/abnormal/batch';
+    const res = await fetch(`${API_BASE}${endpoint}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -476,17 +661,19 @@ async function doImport() {
       body: JSON.stringify({ items })
     });
     const data = await res.json();
-    
+
     if (data.success) {
       document.getElementById('import-modal').style.display = 'none';
-      document.getElementById('import-textarea').value = '';
-      loadPersons();
-      showToast(`成功导入 ${data.count} 人`);
+      resetImportUI();
+      if (importType === 'person') {
+        loadPersons();
+      }
+      showToast(`成功导入 ${data.count} 条记录`);
     } else {
-      showToast('导入失败');
+      showToast('导入失败: ' + (data.error || '未知错误'));
     }
   } catch (err) {
-    showToast('网络错误');
+    showToast('网络错误: ' + err.message);
   }
 }
 
