@@ -12,6 +12,8 @@ let editingId = null;
 let photoUrl = '';
 let importType = 'person'; // 'person' or 'abnormal'
 let parsedItems = []; // 解析后的数据
+let abnormalPassengers = []; // 异常乘客列表
+let currentTab = 'person'; // 当前标签页：'person' 或 'abnormal'
 
 // ========== 初始化 ==========
 document.addEventListener('DOMContentLoaded', () => {
