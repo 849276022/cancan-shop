@@ -576,7 +576,7 @@ async function savePerson() {
   };
   
   try {
-    const url = editingId ? `${API_BASE}/persons/${editingId}` : `${API_BASE}/persons`;
+    const url = editingId ? `${API_BASE}/persons/${editingId}` : `${API_BASE}/persons-create`;
     const method = editingId ? 'PUT' : 'POST';
     
     const res = await fetch(url, {

@@ -16,6 +16,11 @@
   status = 200
 
 [[redirects]]
+  from = "/api/persons-create"
+  to = "/.netlify/functions/persons-create"
+  status = 200
+
+[[redirects]]
   from = "/api/persons/batch"
   to = "/.netlify/functions/persons-batch"
   status = 200
