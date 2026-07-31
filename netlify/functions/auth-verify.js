@@ -1,4 +1,4 @@
-const FIXED_TOKEN = 'king-d…2026';
+const FIXED_TOKEN = 'king-dating-jwt-secret-2026';
 exports.handler = async (event) => {
   const authHeader = event.headers?.authorization || event.headers?.Authorization || '';
   const token = authHeader.replace('Bearer ', '');

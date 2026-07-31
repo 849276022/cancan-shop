@@ -1,5 +1,5 @@
 const { Pool } = require('pg');
-const FIXED_TOKEN = 'king-d…2026';
+const FIXED_TOKEN = 'king-dating-jwt-secret-2026';
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL || 'postgresql://neondb_owner:npg_MNyJlfO19Erx@ep-lively-water-aqonh1o6-pooler.c-8.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require',
   ssl: { rejectUnauthorized: false }
