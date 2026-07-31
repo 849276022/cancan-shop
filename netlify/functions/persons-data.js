@@ -10,7 +10,8 @@ exports.handler = async (event) => {
   const token = authHeader.replace('Bearer ', '');
   if (token !== FIXED_TOKEN) return { statusCode: 401, body: JSON.stringify({ success: false, error: '未登录' }) };
   try {
-    return { statusCode: 200, body: JSON.stringify({ success: true, data: [], probe: 'function-ok' }) };
+    const result = await pool.query('SELECT * FROM persons ORDER BY created_at DESC');
+    return { statusCode: 200, body: JSON.stringify({ success: true, data: result.rows }) };
   } catch (error) {
     return { statusCode: 500, body: JSON.stringify({ success: false, error: error.message }) };
   }
