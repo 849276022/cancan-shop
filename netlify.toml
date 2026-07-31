@@ -2,6 +2,10 @@
   command = "echo 'Build complete'"
   publish = "pwa"
 
+[functions]
+  node_bundler = "esbuild"
+  timeout = "26s"
+
 [[redirects]]
   from = "/api/abnormal/batch"
   to = "/.netlify/functions/abnormal-batch"

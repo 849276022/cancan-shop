@@ -670,6 +670,18 @@ async function doImport() {
       },
       body: JSON.stringify({ items })
     });
+    
+    if (!res.ok) {
+      const text = await res.text();
+      console.error('导入失败:', res.status, text);
+      if (res.status === 504 || res.status === 502) {
+        showToast('服务器超时，请稍后重试或减少导入数量');
+        return;
+      }
+      showToast(`导入失败: ${res.status} ${text}`);
+      return;
+    }
+    
     const data = await res.json();
 
     if (data.success) {
