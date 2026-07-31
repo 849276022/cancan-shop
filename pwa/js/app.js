@@ -309,7 +309,7 @@ async function loadPersonPhotos() {
   for (let i = 0; i < targets.length; i += 3) {
     await Promise.all(targets.slice(i, i + 3).map(async person => {
       try {
-        const res = await fetch(`${API_BASE}/persons/${encodeURIComponent(person.id)}/photo`, {
+        const res = await fetch(`${API_BASE}/person-photo?id=${encodeURIComponent(person.id)}`, {
           headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }, cache: 'no-store'
         });
         const result = await res.json();

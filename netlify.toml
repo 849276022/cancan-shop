@@ -21,6 +21,11 @@
   status = 200
 
 [[redirects]]
+  from = "/api/person-photo"
+  to = "/.netlify/functions/person-photo"
+  status = 200
+
+[[redirects]]
   from = "/api/persons/:id/photo"
   to = "/.netlify/functions/persons-photo?id=:id"
   status = 200
