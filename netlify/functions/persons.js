@@ -1,10 +1,9 @@
 const { Pool } = require('pg');
 
 const FIXED_TOKEN = 'king-dating-jwt-secret-2026';
-const DATABASE_URL = 'postgresql://neondb_owner:npg_MNyJlfO19Erx@ep-lively-water-aqonh1o6-pooler.c-8.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require';
 const pool = new Pool({
-  // 使用已验证的 Neon 连接，避免 Netlify 环境变量指向旧/错误数据库。
-  connectionString: DATABASE_URL,
+  // 与线上正常工作的 abnormal-list 使用相同连接方式。
+  connectionString: process.env.DATABASE_URL || 'postgresql://neondb_owner:npg_MNyJlfO19Erx@ep-lively-water-aqonh1o6-pooler.c-8.us-east-1.aws.neon.tech/neondb?sslmode=require',
   ssl: { rejectUnauthorized: false },
   connectionTimeoutMillis: 15000
 });
