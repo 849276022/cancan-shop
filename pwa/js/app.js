@@ -314,7 +314,8 @@ async function loadPersonPhotos() {
         });
         const result = await res.json();
         if (result.success && result.photoUrl) person.photoUrl = result.photoUrl;
-      } catch (err) { console.warn('Photo load failed:', person.id, err); }
+        else person.photoLoadError = true;
+      } catch (err) { person.photoLoadError = true; console.warn('Photo load failed:', person.id, err); }
     }));
     filterPersons();
   }
@@ -430,7 +431,7 @@ function renderPersons() {
         <span class="status-tag status-${getStatusClass(p.status)}">${escapeHtml(p.status)}</span>
       </div>
       
-      ${p.photoUrl ? `<div class="card-photo"><img src="${p.photoUrl}" class="photo-img" onclick="previewImage('${p.photoUrl}')"></div>` : ''}
+      ${p.photoUrl ? `<div class="card-photo"><img src="${p.photoUrl}" class="photo-img" alt="${escapeHtml(p.name || '人员')}人脸照片" onclick="previewImage(this.src)"></div>` : (p.hasPhoto && p.photoLoadError ? `<div class="card-photo photo-load-error">人脸照片加载失败，请点击编辑查看</div>` : '')}
       
       <div class="card-body">
         <div class="info-row">
