@@ -6,7 +6,7 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 });
 
-const JWT_SECRET = process.env.JWT_SECRET || 'lost-person-secret-key-2026';
+const JWT_SECRET = 'king-dating-jwt-secret-2026';
 
 function auth(event) {
   const token = event.headers.authorization?.replace('Bearer ', '');
