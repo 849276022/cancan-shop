@@ -8,13 +8,31 @@ const pool = new Pool({
 });
 
 exports.handler = async (event) => {
-  if (event.httpMethod !== 'GET') {
-    return { statusCode: 405, body: JSON.stringify({ success: false, error: '方法不允许' }) };
-  }
   const authHeader = event.headers?.authorization || event.headers?.Authorization || '';
   const token = authHeader.replace(/^Bearer\s+/i, '');
   if (token !== FIXED_TOKEN) {
     return { statusCode: 401, body: JSON.stringify({ success: false, error: '未登录' }) };
+  }
+  if (event.httpMethod === 'POST') {
+    try {
+      const body = JSON.parse(event.body || '{}');
+      const result = await pool.query(`INSERT INTO public.persons
+        (name, gender, age, id_card, found_time, found_location, status, station,
+         family_name, family_phone, family_relation, family_address, photo_url, remark, created_by)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15) RETURNING *`, [
+        body.name || '', body.gender || '', Number(body.age) || 0, body.idCard || '',
+        body.foundTime || '', body.foundLocation || '', body.status || '待核实', body.station || '',
+        body.familyName || '', body.familyPhone || '', body.familyRelation || '', body.familyAddress || '',
+        body.photoUrl || null, body.remark || '', 1
+      ]);
+      return { statusCode: 200, body: JSON.stringify({ success: true, data: result.rows[0] }) };
+    } catch (error) {
+      console.error('persons create error:', error);
+      return { statusCode: 500, body: JSON.stringify({ success: false, error: error.message }) };
+    }
+  }
+  if (event.httpMethod !== 'GET') {
+    return { statusCode: 405, body: JSON.stringify({ success: false, error: '方法不允许' }) };
   }
   try {
     // 列表禁止 SELECT *：photo_url 是数 MB 的 Base64 图片，会超过 Netlify 响应大小限制并触发 502。
